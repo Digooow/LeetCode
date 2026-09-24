@@ -1,0 +1,2 @@
+# Ignora executáveis gerados pela compilação dos arquivos C++.
+*.exe
