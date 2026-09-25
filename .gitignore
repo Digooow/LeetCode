@@ -1,2 +1,86 @@
-# Ignora executáveis gerados pela compilação dos arquivos C++.
+# Arquivos gerados pela compilação C/C++.
 *.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.a
+*.lib
+*.pdb
+*.ilk
+*.idb
+*.gch
+*.pch
+
+# Diretórios e artefatos de build.
+build/
+Build/
+out/
+bin/
+obj/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+
+# Configurações locais do Visual Studio Code.
+.vscode/
+*.code-workspace
+
+# Outras configurações locais de IDEs.
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Variáveis de ambiente e arquivos que podem conter segredos.
+.env
+.env.*
+!.env.example
+!.env.template
+*.local
+*.secret
+*.secrets
+secrets/
+secret/
+
+# Chaves, certificados e credenciais.
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials.json
+service-account*.json
+
+# Logs, dumps e arquivos temporários.
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.dump
+*.dmp
+*.stackdump
+
+# Arquivos gerados pelo sistema operacional.
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Caches de ferramentas e linguagens.
+.cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+node_modules/
+
+# Regras comuns de proteção para todos os projetos.
