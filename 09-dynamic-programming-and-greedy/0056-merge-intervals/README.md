@@ -1,24 +1,23 @@
-# 56. Merge Intervals
+# 0056 · Merge Intervals
 
-- **Nível:** Intermediário ([LeetCode #56](https://leetcode.com/problems/merge-intervals/))
-- **Classificação do Conceito:**
-  - **Paradigma:** *Greedy Algorithm* (Algoritmo Guloso)
-  - **Padrão Algorítmico:** *Interval Sorting & Linear Sweep* (Ordenação de Intervalos e Varredura Linear)
+**Dificuldade:** Intermediário | **Categoria:** Dynamic Programming & Greedy | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de intervalos `intervals` no formato `[start, end]`, mesclar todos os intervalos sobrepostos (inclusive adjacentes em ponto extremo, como `[1, 4]` e `[4, 5]`) e retornar a lista resultante de intervalos disjuntos.
 
-Problemas de agendamento e sobreposição de horários (como o próprio sistema de reservas de salas que você desenvolveu no `Projeto-Integrador2`!) usam o padrão **Interval Sweep**:
-1. Ordenamos todos os intervalos pelo horário de início `interval[0]` ($O(n \log n)$).
-2. Graças a essa ordenação, todos os intervalos que podem se sobrepor ao intervalo atual são obrigatoriamente **contíguos** na lista ordenada!
-3. Mantemos o último intervalo mesclado em `merged.back()`:
-   - Se `curr.start <= merged.back().end`, há sobreposição $\rightarrow$ estendemos o fim de forma gulosa: `merged.back()[1] = std::max(merged.back()[1], curr[1])`.
-   - Caso contrário, não há sobreposição $\rightarrow$ iniciamos um novo intervalo em `merged`.
+## Abordagem
 
----
+Ordenar `intervals` pelo ponto inicial garante que potenciais sobreposições apareçam contíguas em sequência linear.
 
-## 2. Complexidade
+Em `merge`:
+1. Trata `intervals.empty()` retornando `{}`.
+2. Ordena `intervals` com `std::sort` e insere `intervals[0]` em `merged`.
+3. Para cada intervalo subsequente `intervals[i]`:
+   - Se `intervals[i][0] <= merged.back()[1]`, há sobreposição com o último intervalo consolidado; estende-se o término com `std::max(merged.back()[1], intervals[i][1])` para cobrir também intervalos totalmente contidos (ex.: `[1, 10]` seguido de `[2, 5]`).
+   - Caso contrário, adiciona `intervals[i]` como novo bloco em `merged`.
 
-- **Tempo:** $O(n \log n)$ dominado pela ordenação inicial.
-- **Espaço Auxiliar:** $O(\log n)$ da ordenação (além do vetor de resposta).
+## Complexidade
+
+- **Tempo:** $O(n \log n)$ — dominado por `std::sort`; a varredura linear seguinte custa $O(n)$.
+- **Espaço:** $O(\log n)$ a $O(n)$ — conforme a pilha da ordenação e a cópia do vetor de entrada (desconsiderando `merged`).

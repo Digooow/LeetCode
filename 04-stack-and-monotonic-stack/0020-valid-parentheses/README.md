@@ -1,35 +1,22 @@
-# 20. Valid Parentheses
+# 0020 · Valid Parentheses
 
-- **Nível:** Fácil ([LeetCode #20](https://leetcode.com/problems/valid-parentheses/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Pilha (*LIFO Stack* — `std::stack<char>`)
-  - **Conceito Teórico:** Reconhecimento de Linguagem Livre de Contexto (Gramática de Dyck)
+**Dificuldade:** Fácil | **Categoria:** Stack & Monotonic Stack | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada uma string `s` contendo apenas os caracteres `'('`, `')'`, `'{'`, `'}'`, `'['` e `']'`, determinar se a sequência de delimitadores é válida quanto à ordem de abertura e fechamento.
 
-Quando abrimos delimitadores aninhados como `({[]})`, o delimitador aberto **mais recentemente** (`[`) deve ser fechado **primeiro** (`]`). Essa propriedade de inversão de ordem (*Last-In, First-Out*) é exatamente a definição de uma **Pilha (*Stack*)**.
+## Abordagem
 
-Um truque elegante de implementação: ao ler um caractere de abertura (`(`, `[`, `{`), empilhamos diretamente o **caractere de fechamento esperado** (`)`, `]`, `}`). Assim, quando lemos um fechamento, basta verificar se ele é igual a `st.top()`.
+Em `isValid`, utiliza-se uma `std::stack<char>` (`expected`) para registrar o caractere de fechamento esperado para cada abertura encontrada:
 
----
+1. Ao ler `'('`, `'['` ou `'{'`, empilha-se respectivamente `')'`, `']'` ou `'}'` em `expected`.
+2. Ao ler um delimitador de fechamento `c`, verifica-se se `expected` não está vazia e se `expected.top() == c`; em caso negativo, retorna `false` imediatamente. Caso coincida, executa-se `expected.pop()`.
+3. Ao término da string, retorna `expected.empty()` para garantir que nenhum delimitador aberto ficou sem fechamento.
 
-## 2. Explicação do Algoritmo Passo a Passo
+Empilhar diretamente o símbolo de fechamento simplifica o ramo de validação, dispensando um mapa ou tabela auxiliar de pares.
 
-1. Criamos `std::stack<char> expected`.
-2. Para cada caractere `c` em `s`:
-   - Se `c == '('`, fazemos `expected.push(')')`.
-   - Se `c == '['`, fazemos `expected.push(']')`.
-   - Se `c == '{'`, fazemos `expected.push('}')`.
-   - Caso contrário (é um fechamento):
-     - Se `expected.empty()` ou `expected.top() != c`, a string é inválida (`return false`).
-     - Fazemos `expected.pop()`.
-3. Ao final, retornamos `expected.empty()` (garantindo que nenhum delimitador ficou aberto).
-
----
-
-## 3. Complexidade
+## Complexidade
 
 - **Tempo:** $O(n)$ — cada caractere é empilhado e desempilhado no máximo uma vez.
-- **Espaço:** $O(n)$ — no pior caso (ex.: `"(((((("`), a pilha armazena $n$ caracteres.
+- **Espaço:** $O(n)$ — profundidade máxima da pilha `expected` quando todos os caracteres iniciais são aberturas.

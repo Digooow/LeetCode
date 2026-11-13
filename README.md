@@ -1,14 +1,12 @@
 # LeetCode Solutions & Algorithmic Patterns (C++17)
 
-Repositório de soluções em **C++17** para os desafios clássicos do [LeetCode](https://leetcode.com/u/digooow/), estruturado por **Padrões Algorítmicos (*Algorithmic Patterns*)** e **Estruturas de Dados (*Data Structures*)**, com explicações teóricas e análise de complexidade em cada pasta.
+Repositório de soluções em **C++17** para problemas do [LeetCode](https://leetcode.com/u/digooow/), organizado por **Padrões Algorítmicos (*Algorithmic Patterns*)** e **Estruturas de Dados**, com documentação técnica e análise de complexidade por problema.
 
 ---
 
-## Glossário Técnico: Qual é o nome certo de cada "conceito"?
+## Padrões e Terminologia
 
-Para usar a terminologia exata em entrevistas técnicas:
-
-| Termo Técnico | Nome em Inglês | O que é na prática | Exemplos |
+| Padrão / Estrutura | Termo em Inglês | Aplicação | Exemplos |
 |---|---|---|---|
 | **Estrutura de Dados** | *Data Structure* | Forma concreta de organizar dados na memória para otimizar leitura, busca, inserção ou remoção. | *Array*, *Hash Table* (`unordered_map`), *Linked List*, *Stack*, *Queue*, *Min-Heap* (`priority_queue`), *Binary Tree*, *Graph*. |
 | **Algoritmo** | *Algorithm* | Sequência finita e determinística de instruções para transformar uma entrada em uma saída. | *Binary Search*, *DFS*, *BFS*, *Algoritmo de Kadane*, *Algoritmo de Floyd*, *Algoritmo de Kahn*, *Boyer-Moore Voting*. |
@@ -35,7 +33,7 @@ Para usar a terminologia exata em entrevistas técnicas:
 
 ## Catálogo Completo de Desafios Resolvidos (39 Problemas: 23 Fáceis · 13 Intermediários · 3 Hard)
 
-### Nível Fácil (23 Clássicos)
+### Nível Fácil (23 Problemas)
 
 | # | Problema | Pasta / Explicação | Código | Padrão / Algoritmo | Complexidade |
 |---|---|---|---|---|---|
@@ -63,9 +61,8 @@ Para usar a terminologia exata em entrevistas técnicas:
 | 704 | Binary Search | [README](./05-binary-search/0704-binary-search/README.md) | [`solution.cpp`](./05-binary-search/0704-binary-search/solution.cpp) | Busca Binária Clássica | $O(\log n)$ tempo · $O(1)$ espaço |
 | 733 | Flood Fill | [README](./08-graphs-and-topological-sort/0733-flood-fill/README.md) | [`solution.cpp`](./08-graphs-and-topological-sort/0733-flood-fill/solution.cpp) | *Grid DFS* (Inundação Conexos) | $O(R \cdot C)$ tempo · $O(R \cdot C)$ espaço |
 
-*(Nota: 23 problemas fáceis incluídos para cobrir todos os 10 módulos fundamentais.)*
 
-### Nível Intermediário (13 Clássicos)
+### Nível Intermediário (13 Problemas)
 
 | # | Problema | Pasta / Explicação | Código | Padrão / Algoritmo | Complexidade |
 |---|---|---|---|---|---|
@@ -83,7 +80,7 @@ Para usar a terminologia exata em entrevistas técnicas:
 | 322 | Coin Change | [README](./09-dynamic-programming-and-greedy/0322-coin-change/README.md) | [`solution.cpp`](./09-dynamic-programming-and-greedy/0322-coin-change/solution.cpp) | DP *Bottom-Up* (*Unbounded Knapsack*) | $O(A \cdot |C|)$ tempo · $O(A)$ espaço |
 | 739 | Daily Temperatures | [README](./04-stack-and-monotonic-stack/0739-daily-temperatures/README.md) | [`solution.cpp`](./04-stack-and-monotonic-stack/0739-daily-temperatures/solution.cpp) | Pilha Monotônica Decrescente | $O(n)$ tempo · $O(n)$ espaço |
 
-### Nível Difícil / Hard (3 Clássicos de Entrevista)
+### Nível Difícil / Hard
 
 | # | Problema | Pasta / Explicação | Código | Padrão / Algoritmo | Complexidade |
 |---|---|---|---|---|---|

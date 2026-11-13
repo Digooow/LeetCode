@@ -1,32 +1,21 @@
-# 643. Maximum Average Subarray I
+# 0643 · Maximum Average Subarray I
 
-- **Nível:** Fácil ([LeetCode #643](https://leetcode.com/problems/maximum-average-subarray-i/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Fixed-Size Sliding Window* (Janela Deslizante de Tamanho Fixo $k$)
+**Dificuldade:** Fácil | **Categoria:** Sliding Window | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros `nums` e um inteiro `k`, encontrar o subarray contíguo de comprimento exato `k` cujo valor médio seja máximo e retornar essa média em ponto flutuante (`double`).
 
-Calcular a soma de cada subarray de tamanho $k$ do zero exigiria somar $k$ elementos para cada posição inicial, levando a $O(n \cdot k)$.
+## Abordagem
 
-Na **Janela Deslizante de Tamanho Fixo**, observamos que duas janelas consecutivas `[i - k .. i - 1]` e `[i - k + 1 .. i]` compartilham $k - 1$ elementos em comum! Portanto, a transição de uma janela para a próxima custa apenas duas operações aritméticas ($O(1)$):
+Como `k` é constante durante toda a execução, maximizar a média $\frac{\text{soma}}{k}$ equivale a maximizar a soma da janela de tamanho fixo `k`.
 
-$$\text{windowSum}_{\text{nova}} = \text{windowSum}_{\text{anterior}} + \underbrace{\text{nums}[i]}_{\text{entrou}} - \underbrace{\text{nums}[i - k]}_{\text{saiu}}$$
+Em `findMaxAverage`:
+1. Calcula-se a soma inicial dos primeiros `k` elementos em `windowSum` (tipado como `long long` para prevenir *overflow* caso $k \cdot \max(|\text{nums}[i]|)$ exceda 32 bits).
+2. De `i = k` até `nums.size() - 1`, a janela desliza em $O(1)$ somando o novo elemento e subtraindo o elemento que saiu da extremidade esquerda: `windowSum += nums[i] - nums[i - k]`.
+3. Mantém-se o máximo em `maxSum` e a divisão por `k` ocorre apenas uma vez no retorno (`static_cast<double>(maxSum) / k`).
 
----
+## Complexidade
 
-## 2. Explicação do Algoritmo Passo a Passo
-
-1. Somamos os primeiros $k$ elementos em `windowSum` e inicializamos `maxSum = windowSum`.
-2. Para `i` de `k` até `n - 1`:
-   - Atualizamos `windowSum += nums[i] - nums[i - k]`.
-   - Atualizamos `maxSum = std::max(maxSum, windowSum)`.
-3. Retornamos `static_cast<double>(maxSum) / k`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — cada elemento entra na janela uma vez e sai no máximo uma vez.
-- **Espaço:** $O(1)$ — apenas variáveis acumuladoras escalares.
+- **Tempo:** $O(n)$ — cada elemento entra e sai da janela no máximo uma vez.
+- **Espaço:** $O(1)$ — apenas os acumuladores `windowSum` e `maxSum`.

@@ -1,38 +1,24 @@
-# 33. Search in Rotated Sorted Array
+# 0033 · Search in Rotated Sorted Array
 
-- **Nível:** Intermediário ([LeetCode #33](https://leetcode.com/problems/search-in-rotated-sorted-array/))
-- **Classificação do Conceito:**
-  - **Algoritmo:** *Modified Binary Search by Sorted Half Invariant* (Busca Binária Modificada por Identificação de Metade Ordenada)
+**Dificuldade:** Intermediário | **Categoria:** Binary Search | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros distintos `nums` originalmente ordenado de forma crescente e rotacionado em um pivô desconhecido, retornar o índice de `target` em tempo $O(\log n)$, ou `-1` se não existir.
 
-Quando um array estritamente crescente sofre uma rotação (por exemplo, `[4, 5, 6, 7, 0, 1, 2]`), ele deixa de ser globalmente ordenado, mas preserva um **invariante estrutural poderoso**:
+## Abordagem
 
-> Ao dividir qualquer subarray rotacionado ao meio (`mid`), **pelo menos uma das duas metades (`[left..mid]` ou `[mid..right]`) estará 100% ordenada de forma contínua**.
+Ao dividir qualquer intervalo `[left, right]` pelo ponto médio `mid = left + (right - left) / 2`, ao menos uma das duas subfaixas (`[left, mid]` ou `[mid, right]`) permanece estritamente ordenada. `search` utiliza essa invariante para decidir em $O(1)$ qual metade descartar:
 
-Assim, em cada passo da Busca Binária:
-1. Descobrimos qual metade está ordenada comparando `nums[left] <= nums[mid]`.
-2. Verificamos se `target` está dentro dos limites da metade ordenada (`nums[left] <= target && target < nums[mid]`). Se estiver, buscamos nela; caso contrário, buscamos na outra metade!
+1. Se `nums[mid] == target`, retorna `mid`.
+2. Se `nums[left] <= nums[mid]`, a metade esquerda está ordenada:
+   - Se `nums[left] <= target && target < nums[mid]`, restringe a `right = mid - 1`.
+   - Caso contrário, busca à direita (`left = mid + 1`).
+3. Senão, a metade direita `[mid, right]` é que está ordenada:
+   - Se `nums[mid] < target && target <= nums[right]`, restringe a `left = mid + 1`.
+   - Caso contrário, busca à esquerda (`right = mid - 1`).
 
----
+## Complexidade
 
-## 2. Explicação do Algoritmo Passo a Passo
-
-1. Inicializamos `left = 0`, `right = n - 1`.
-2. Enquanto `left <= right`:
-   - `mid = left + (right - left) / 2`.
-   - Se `nums[mid] == target`, retornamos `mid`.
-   - **Caso A — Metade esquerda `[left..mid]` está ordenada (`nums[left] <= nums[mid]`):**
-     - Se `nums[left] <= target && target < nums[mid]`, fazemos `right = mid - 1`; senão `left = mid + 1`.
-   - **Caso B — Metade direita `[mid..right]` está ordenada:**
-     - Se `nums[mid] < target && target <= nums[right]`, fazemos `left = mid + 1`; senão `right = mid - 1`.
-3. Se não encontrar, retornamos `-1`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(\log n)$ — descarta metade do array a cada passo.
-- **Espaço:** $O(1)$.
+- **Tempo:** $O(\log n)$ — o intervalo de busca é reduzido pela metade a cada iteração.
+- **Espaço:** $O(1)$ — busca iterativa apenas com ponteiros de índice (`left`, `right`, `mid`).

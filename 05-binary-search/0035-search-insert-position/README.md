@@ -1,34 +1,23 @@
-# 35. Search Insert Position
+# 0035 · Search Insert Position
 
-- **Nível:** Fácil ([LeetCode #35](https://leetcode.com/problems/search-insert-position/))
-- **Classificação do Conceito:**
-  - **Algoritmo:** *Lower Bound Binary Search* (Busca Binária de Limite Inferior)
+**Dificuldade:** Fácil | **Categoria:** Binary Search | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor ordenado de inteiros distintos `nums` e um valor `target`, retornar o índice caso `target` seja encontrado ou o índice onde ele deveria ser inserido para preservar a ordenação em tempo $O(\log n)$.
 
-Na Ciência da Computação (e na STL do C++ via `std::lower_bound`), o **Lower Bound** de um valor `target` em um array ordenado é o **menor índice $i$ tal que $\text{nums}[i] \ge \text{target}$** (ou `n`, caso todos os elementos sejam menores que `target`).
+## Abordagem
 
-Essa definição unifica os dois casos do problema:
-- Se `target` existe no array, o primeiro índice com `nums[i] >= target` é o próprio índice de `target`.
-- Se `target` não existe, o primeiro índice com `nums[i] >= target` é exatamente a posição onde `target` deve ser inserido para manter a ordenação!
+`searchInsert` implementa uma busca binária de limite inferior (*lower bound*) em intervalo fechado `[left, right]`:
 
----
+- Calcula `mid = left + (right - left) / 2`.
+- Se `nums[mid] == target`, retorna `mid`.
+- Se `nums[mid] < target`, avança `left = mid + 1`.
+- Caso contrário (`nums[mid] > target`), recua `right = mid - 1`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+**Invariante ao término do laço:** quando `left > right` sem correspondência exata, todos os elementos à esquerda de `left` são estritamente menores que `target` e `nums[left]` (se existir dentro dos limites) é estritamente maior que `target`. Logo, `left` coincide exatamente com o índice de inserção.
 
-1. Inicializamos `left = 0` e `right = n - 1`.
-2. Enquanto `left <= right`:
-   - `mid = left + (right - left) / 2`.
-   - Se `nums[mid] == target`, retornamos `mid`.
-   - Se `nums[mid] < target`, a posição de inserção está estritamente à direita $\rightarrow$ `left = mid + 1`.
-   - Se `nums[mid] > target`, `mid` pode ser a resposta ou algo à esquerda $\rightarrow$ `right = mid - 1`.
-3. Quando o laço termina (`left > right`), `left` aponta exatamente para o *Lower Bound*.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(\log n)$.
-- **Espaço:** $O(1)$.
+- **Tempo:** $O(\log n)$ — redução binária a cada iteração.
+- **Espaço:** $O(1)$ — variáveis escalares apenas.

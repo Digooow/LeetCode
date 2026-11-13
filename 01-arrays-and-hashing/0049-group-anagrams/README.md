@@ -1,37 +1,21 @@
-# 49. Group Anagrams
+# 0049 · Group Anagrams
 
-- **Nível:** Intermediário ([LeetCode #49](https://leetcode.com/problems/group-anagrams/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Tabela Hash Multivalorada (`std::unordered_map<std::string, std::vector<std::string>>`)
-  - **Padrão Algorítmico:** *Canonical Key Hashing* (Agrupamento por Representação Canônica / Classe de Equivalência)
+**Dificuldade:** Intermediário | **Categoria:** Arrays & Hashing | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de strings `strs`, agrupar todas as strings que são anagramas entre si em subgrupos distintos.
 
-Na Matemática e na Ciência da Computação, uma **Forma Canônica (*Canonical Form*)** é uma representação única escolhida para identificar todos os membros de uma mesma **classe de equivalência**.
+## Abordagem
 
-Duas strings $A$ e $B$ são anagramas se e somente se suas versões ordenadas alfabeticamente são idênticas:
-- `"eat"` $\xrightarrow{\text{sort}}$ `"aet"`
-- `"tea"` $\xrightarrow{\text{sort}}$ `"aet"`
-- `"ate"` $\xrightarrow{\text{sort}}$ `"aet"`
+Dois anagramas diferem apenas na permutação de seus caracteres; quando ordenados lexicograficamente, produzem a mesma representação canônica (ex.: `"eat"`, `"tea"` e `"ate"` mapeiam para `"aet"`).
 
-Ao usar a forma canônica (`"aet"`) como **chave** de um `std::unordered_map`, todas as palavras que são anagramas entre si caem exatamente no mesmo *bucket* em $O(1)$.
+Em `groupAnagrams`:
+1. Para cada string `s` em `strs`, cria-se uma cópia `canonicalKey` e ordenam-se seus caracteres com `std::sort`.
+2. A string original `s` é inserida no balde `groups[canonicalKey]`.
+3. Ao término do laço, os vetores acumulados em `groups` são transferidos via `std::move` para `result` (pré-alocado com `result.reserve(groups.size())`), evitando cópias desnecessárias dos baldes.
 
----
+## Complexidade
 
-## 2. Explicação do Algoritmo Passo a Passo
-
-1. Criamos `std::unordered_map<std::string, std::vector<std::string>> groups`.
-2. Para cada palavra `word` em `strs`:
-   - Criamos uma cópia `key = word` e aplicamos `std::sort(key.begin(), key.end())`.
-   - Adicionamos `word` ao vetor `groups[key]`.
-3. Percorremos todos os pares de `groups` e movemos cada vetor de anagramas para a matriz de resposta.
-
----
-
-## 3. Complexidade
-
-Seja $n$ o número de strings e $k$ o tamanho máximo de uma string:
-- **Tempo:** $O(n \cdot k \log k)$ — ordenar cada string de tamanho $k$ custa $O(k \log k)$, repetido $n$ vezes.
-- **Espaço:** $O(n \cdot k)$ — para armazenar todas as strings agrupadas na tabela hash.
+- **Tempo:** $O(n \cdot k \log k)$ — onde $n$ é a quantidade de strings e $k$ é o comprimento máximo de uma string, devido à ordenação de cada `canonicalKey`.
+- **Espaço:** $O(n \cdot k)$ — armazenamento das chaves canônicas e de todas as strings nos grupos de saída.

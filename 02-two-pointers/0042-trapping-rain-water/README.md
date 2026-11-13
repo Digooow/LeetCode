@@ -1,43 +1,19 @@
-# 42. Trapping Rain Water
+# 0042 · Trapping Rain Water
 
-- **Nível:** Difícil / Hard ([LeetCode #42](https://leetcode.com/problems/trapping-rain-water/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Two Pointers with Prefix/Suffix Max Invariant* (Dois Ponteiros com Invariante de Máximo Acumulado)
+**Dificuldade:** Difícil (Hard) | **Categoria:** Two Pointers | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito e por que este problema Hard é tão cobrado?
+Dado um mapa de elevação representado pelo vetor de inteiros não negativos `height` (barras de largura unitária), calcular o volume total de água que pode ficar retido entre as barras após uma chuva.
 
-A quantidade de água acumulada exatamente sobre a barra $i$ depende apenas da maior parede à sua esquerda ($L_{\max}[i]$) e da maior parede à sua direita ($R_{\max}[i]$):
+## Abordagem
 
-$$\text{água}[i] = \max\Big(0,\ \min(L_{\max}[i], R_{\max}[i]) - \text{height}[i]\Big)$$
+A água retida sobre a posição $i$ é determinada por $\min(\text{maxLeft}[i], \text{maxRight}[i]) - \text{height}[i]$. Em vez de pré-computar dois vetores auxiliares em $O(n)$ de memória, `trap` resolve o cálculo com ponteiros convergentes (`left`, `right`) e rastreadores escalares `leftMax` e `rightMax`:
 
-Uma solução com Programação Dinâmica pré-calcula dois vetores `leftMax[]` e `rightMax[]` em $O(n)$ tempo e $O(n)$ espaço.
+- Se `height[left] <= height[right]`: sabe-se que existe à direita pelo menos uma parede de altura $\ge \text{height}[\text{left}]$. Portanto, o gargalo efetivo em `left` depende apenas de `leftMax` (já visto até `left`). Atualiza-se `leftMax`, soma-se `leftMax - height[left]` em `totalWater` e avança `++left`.
+- Caso contrário (`height[left] > height[right]`): por simetria, o lado esquerdo garante uma barreira maior ou igual; o nível de água em `right` é determinado exclusivamente por `rightMax`. Atualiza-se `rightMax`, acumula-se `rightMax - height[right]` e recua `--right`.
 
-Porém, usando **Two Pointers Convergentes**, conseguimos reduzir o espaço para **$O(1)$**:
-- Mantemos `leftMax` (máximo visto em `0..left`) e `rightMax` (máximo visto em `right..n-1`).
-- Se `leftMax <= rightMax`, sabemos **com certeza absoluta** que o nível de água em `left` é limitado por `leftMax` (mesmo que exista uma parede ainda maior no meio não explorado, o mínimo entre os dois lados para a posição `left` será exatamente `leftMax`).
-- Simetricamente, se `rightMax < leftMax`, o nível em `right` é limitado por `rightMax`.
+## Complexidade
 
----
-
-## 2. Explicação do Algoritmo Passo a Passo
-
-1. Inicializamos `left = 0`, `right = n - 1`, `leftMax = 0`, `rightMax = 0` e `trapped = 0`.
-2. Enquanto `left < right`:
-   - Se `height[left] <= height[right]`:
-     - Atualizamos `leftMax = std::max(leftMax, height[left])`.
-     - Somamos `trapped += leftMax - height[left]`.
-     - Avançamos `++left`.
-   - Caso contrário:
-     - Atualizamos `rightMax = std::max(rightMax, height[right])`.
-     - Somamos `trapped += rightMax - height[right]`.
-     - Recuamos `--right`.
-3. Retornamos `trapped`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — uma única passagem convergente pelo array.
-- **Espaço:** $O(1)$ — zero alocação auxiliar.
+- **Tempo:** $O(n)$ — cada índice é processado exatamente uma vez pelos ponteiros `left` e `right`.
+- **Espaço:** $O(1)$ — apenas cinco variáveis escalares.

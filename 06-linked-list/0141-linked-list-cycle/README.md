@@ -1,35 +1,23 @@
-# 141. Linked List Cycle
+# 0141 · Linked List Cycle
 
-- **Nível:** Fácil ([LeetCode #141](https://leetcode.com/problems/linked-list-cycle/))
-- **Classificação do Conceito:**
-  - **Algoritmo Clássico:** *Floyd's Tortoise and Hare Cycle-Finding Algorithm* (Algoritmo da Tartaruga e da Lebre de Floyd)
-  - **Padrão Algorítmico:** *Fast & Slow Pointers* (Ponteiros Rápido e Lento)
+**Dificuldade:** Fácil | **Categoria:** Linked List | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada a cabeça `head` de uma lista simplesmente encadeada, determinar se existe algum ciclo na estrutura de ponteiros.
 
-Guardar todos os endereços de memória visitados em um `std::unordered_set<ListNode*>` resolveria o problema em $O(n)$ tempo, mas custaria $O(n)$ de memória.
+## Abordagem
 
-O **Algoritmo de Floyd (*Fast & Slow Pointers*)** detecta ciclos em **$O(1)$ de memória**:
-- O ponteiro lento (`slow`) avança **1 passo** por iteração.
-- O ponteiro rápido (`fast`) avança **2 passos** por iteração.
-- Se a lista possui um ciclo de comprimento $C$, assim que ambos entram no ciclo, a distância entre `fast` e `slow` diminui exatamente em **1 nó por iteração**, garantindo matematicamente que eles colidirão (`slow == fast`) em menos de $C$ passos!
+Armazenar nós visitados em um `std::unordered_set<ListNode*>` resolveria em $O(n)$ de memória. Para manter espaço constante $O(1)$, `hasCycle` aplica o algoritmo de detecção de ciclo de Floyd (*Tortoise and Hare*):
 
----
+- Inicializa `slow = head` e `fast = head`.
+- Em cada iteração de `while (fast != nullptr && fast->next != nullptr)`:
+  - `slow` avança 1 nó (`slow = slow->next`);
+  - `fast` avança 2 nós (`fast = fast->next->next`).
+- Se `slow == fast`, há interseção dentro do ciclo e retorna `true`.
+- Se `fast` alcançar `nullptr`, a lista termina de forma linear e retorna `false`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+## Complexidade
 
-1. Inicializamos `slow = head` e `fast = head`.
-2. Enquanto `fast != nullptr && fast->next != nullptr`:
-   - `slow = slow->next;`
-   - `fast = fast->next->next;`
-   - Se `slow == fast`, retornamos `true`.
-3. Se `fast` alcançou o final (`nullptr`), não há ciclo (`return false`).
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$.
-- **Espaço:** $O(1)$ — apenas dois ponteiros.
+- **Tempo:** $O(n)$ — se não houver ciclo, `fast` percorre a lista na metade dos passos; se houver ciclo, a distância relativa entre `fast` e `slow` diminui em 1 nó por iteração até a colisão.
+- **Espaço:** $O(1)$ — apenas os dois ponteiros `slow` e `fast`.

@@ -1,34 +1,20 @@
-# 26. Remove Duplicates from Sorted Array
+# 0026 · Remove Duplicates from Sorted Array
 
-- **Nível:** Fácil ([LeetCode #26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Reader/Writer Two Pointers* (Dois Ponteiros Leitor/Escritor para Desduplicação *In-Place*)
+**Dificuldade:** Fácil | **Categoria:** Two Pointers | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor `nums` ordenado em ordem não decrescente, remover as duplicatas *in-place* preservando a ordem relativa dos valores únicos e retornar a quantidade `k` de elementos distintos nas primeiras `k` posições.
 
-Como o array já está **ordenado**, todos os elementos duplicados aparecem em posições adjacentes. Remover elementos do meio de um `std::vector` com `.erase()` deslocaria todos os elementos seguintes a cada remoção, custando $O(n^2)$.
+## Abordagem
 
-O padrão **Reader/Writer Two Pointers** mantém um invariante de partição no próprio array:
-- O ponteiro `write` aponta para a próxima posição onde o próximo valor único deve ser gravado (tudo em `nums[0 .. write - 1]` já é único e ordenado).
-- O ponteiro `read` varre o array procurando um elemento diferente do último único gravado (`nums[read] != nums[write - 1]`).
+Após tratar o caso de entrada vazia (`if (nums.empty()) return 0;`), `removeDuplicates` utiliza o padrão *Reader/Writer* na mesma direção:
 
----
+- `write = 1` marca a próxima posição livre da partição compactada (o índice `0` é sempre único por definição).
+- `read` percorre os índices de `1` até `nums.size() - 1`.
+- Sempre que `nums[read] != nums[write - 1]`, trata-se de um novo valor distinto em um vetor ordenado; ele é gravado em `nums[write]` e `write` avança.
 
-## 2. Explicação do Algoritmo Passo a Passo
+## Complexidade
 
-1. Se `nums` estiver vazio, retornamos `0`.
-2. Inicializamos `write = 1` (pois `nums[0]` é sempre o primeiro único).
-3. Para `read` de `1` até `n - 1`:
-   - Se `nums[read] != nums[write - 1]`, encontramos um novo valor distinto:
-     - Copiamos `nums[write] = nums[read]`.
-     - Incrementamos `++write`.
-4. Retornamos `write` (quantidade de elementos únicos).
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — uma única passagem pelo vetor.
-- **Espaço:** $O(1)$ — modificação 100% *in-place*.
+- **Tempo:** $O(n)$ — leitura linear única sobre `nums`.
+- **Espaço:** $O(1)$ — compactação realizada *in-place*, sem alocação auxiliar.

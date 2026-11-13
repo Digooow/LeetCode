@@ -1,26 +1,23 @@
-# 322. Coin Change
+# 0322 · Coin Change
 
-- **Nível:** Intermediário ([LeetCode #322](https://leetcode.com/problems/coin-change/))
-- **Classificação do Conceito:**
-  - **Paradigma:** *Bottom-Up Dynamic Programming (Tabulation)* (Programação Dinâmica por Tabulação)
-  - **Modelo Clássico:** *Unbounded Knapsack Variant* (Problema da Mochila Ilimitada)
+**Dificuldade:** Intermediário | **Categoria:** Dynamic Programming & Greedy | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito e por que um Algoritmo Guloso falha aqui?
+Dado um vetor de denominações de moedas `coins` (com estoque ilimitado de cada tipo) e um valor alvo `amount`, retornar a quantidade mínima de moedas necessária para compor `amount`, ou `-1` se a composição for impossível.
 
-Muitos candidatos tentam resolver o troco mínimo escolhendo sempre a maior moeda possível (*Greedy*). Isso falha em sistemas de moedas não canônicos: por exemplo, para `coins = [1, 3, 4]` e `amount = 6`, o guloso escolheria `4 + 1 + 1` (3 moedas), enquanto o ótimo é `3 + 3` (2 moedas)!
+## Abordagem
 
-Com **Programação Dinâmica *Bottom-Up***, definimos o estado:
-- `dp[x]` = número mínimo de moedas necessárias para formar o valor exato `x`.
-- Caso base: `dp[0] = 0`, e inicializamos `dp[1..amount] = amount + 1` (sentinela de infinito).
-- Equação de transição (Equação de Bellman):
+Uma estratégia gulosa falharia para sistemas de moedas arbitrários (por exemplo, `coins = {1, 3, 4}` e `amount = 6` exige `2` moedas `{3, 3}`, enquanto a escolha gulosa `4 + 1 + 1` usaria `3`).
 
-$$dp[x] = \min_{c \in \text{coins},\ c \le x} \big(1 + dp[x - c]\big)$$
+`coinChange` resolve o problema como variação de *Unbounded Knapsack* via **Programação Dinâmica *Bottom-Up***:
 
----
+1. Inicializa `dp` de tamanho `amount + 1` com sentinela `inf = amount + 1` (um limite seguro superior ao máximo possível de moedas unitárias e pequeno o bastante para que `1 + dp[curr - coin]` nunca cause *overflow* em `int`), definindo `dp[0] = 0`.
+2. Para cada subvalor `curr` de `1` até `amount` e cada `coin` em `coins`:
+   - Se `coin <= curr`, atualiza `dp[curr] = std::min(dp[curr], 1 + dp[curr - coin])`.
+3. Se `dp[amount] > amount`, nenhum conjunto válido atingiu o valor alvo e retorna `-1`; caso contrário, retorna `dp[amount]`.
 
-## 2. Complexidade
+## Complexidade
 
-- **Tempo:** $O(\text{amount} \times |\text{coins}|)$.
-- **Espaço:** $O(\text{amount})$ para o vetor de tabulação `dp`.
+- **Tempo:** $O(\text{amount} \cdot |\text{coins}|)$ — preenchimento iterativo de `amount` estados testando todas as denominações.
+- **Espaço:** $O(\text{amount})$ — armazenamento da tabela unidimensional `dp`.

@@ -1,33 +1,20 @@
-# 21. Merge Two Sorted Lists
+# 0021 · Merge Two Sorted Lists
 
-- **Nível:** Fácil ([LeetCode #21](https://leetcode.com/problems/merge-two-sorted-lists/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Two-Way Merge with Dummy Head (Sentinel Node)* (Intercalação com Nó Sentinela)
+**Dificuldade:** Fácil | **Categoria:** Linked List | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dadas as cabeças de duas listas simplesmente encadeadas ordenadas `list1` e `list2`, mesclá-las em uma única lista ordenada religando seus nós existentes e retornar a nova cabeça.
 
-Este algoritmo é a etapa de combinação (*Merge Step*) do algoritmo **Merge Sort**, adaptada para listas encadeadas:
-- Em vez de escrever código condicional extra para decidir qual nó será o primeiro `head` da lista resultante, declaramos um objeto local `ListNode dummy(0)` na pilha (*Sentinel / Dummy Head*) e um ponteiro `tail = &dummy`.
-- A cada passo, comparamos `list1->val` e `list2->val`, costuramos o menor em `tail->next` e avançamos.
-- Quando uma das listas acaba, basta apontar `tail->next` para a lista restante em $O(1)$.
+## Abordagem
 
----
+`mergeTwoLists` utiliza um nó sentinela `ListNode dummy(0)` alocado na *stack* com ponteiro cursor `tail = &dummy` para evitar lógica condicional especial ao definir o primeiro nó da lista de saída:
 
-## 2. Explicação do Algoritmo Passo a Passo
+1. Enquanto `list1 != nullptr && list2 != nullptr`, compara `list1->val <= list2->val`: conecta o menor nó em `tail->next` e avança o ponteiro da lista escolhida junto com `tail`.
+2. Quando uma das listas termina, conecta o restante não vazio diretamente em `tail->next = (list1 != nullptr) ? list1 : list2`, aproveitando que os nós remanescentes já estão encadeados e ordenados.
+3. Retorna `dummy.next`.
 
-1. Criamos `ListNode dummy(0)` e `ListNode* tail = &dummy`.
-2. Enquanto `list1 != nullptr && list2 != nullptr`:
-   - Se `list1->val <= list2->val`: `tail->next = list1; list1 = list1->next;`
-   - Senão: `tail->next = list2; list2 = list2->next;`
-   - Avançamos `tail = tail->next`.
-3. Conectamos a sobra: `tail->next = (list1 != nullptr) ? list1 : list2`.
-4. Retornamos `dummy.next`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n + m)$, onde $n$ e $m$ são os tamanhos das duas listas.
-- **Espaço:** $O(1)$ — reaproveita os próprios nós existentes (*in-place splicing*).
+- **Tempo:** $O(n + m)$ — onde $n$ e $m$ são os comprimentos de `list1` e `list2` (e $O(\min(n, m))$ na prática quando uma lista acaba antes da outra).
+- **Espaço:** $O(1)$ — religação *in-place* dos nós existentes usando apenas `dummy` na *stack*.

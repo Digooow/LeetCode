@@ -1,34 +1,22 @@
-# 125. Valid Palindrome
+# 0125 · Valid Palindrome
 
-- **Nível:** Fácil ([LeetCode #125](https://leetcode.com/problems/valid-palindrome/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Converging Two Pointers* (Dois Ponteiros Convergentes / Extremos Opostos)
+**Dificuldade:** Fácil | **Categoria:** Two Pointers | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada uma string `s`, verificar se ela é um palíndromo considerando apenas caracteres alfanuméricos e ignorando diferenças entre maiúsculas e minúsculas.
 
-Uma abordagem ingênua criaria uma nova string filtrada e outra invertida para compará-las, gastando $O(n)$ de memória extra. Com o padrão **Two Pointers Convergentes**, colocamos `left` no primeiro caractere e `right` no último caractere da string original e caminhamos para o centro em $O(1)$ de memória:
+## Abordagem
 
-- Enquanto `s[left]` não for alfanumérico, avançamos `++left`.
-- Enquanto `s[right]` não for alfanumérico, recuamos `--right`.
-- Comparamos `std::tolower(s[left]) == std::tolower(s[right])`.
+Em vez de construir uma nova string filtrada em $O(n)$ de memória, `isPalindrome` verifica simetricamente *in-place* usando dois ponteiros convergentes (`left` e `right`):
 
----
+1. Laços internos avançam `++left` e recuam `--right` enquanto o caractere corrente não for alfanumérico.
+2. Os caracteres válidos nas duas extremidades são convertidos para minúsculo e comparados; na primeira divergência, retorna `false`.
+3. Se todos os pares válidos coincidirem até `left >= right`, retorna `true`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+**Nota de segurança em C++:** todos os argumentos de `std::isalnum` e `std::tolower` recebem `static_cast<unsigned char>(...)`, evitando comportamento indefinido caso um `char` com sinal seja negativo em entradas fora da faixa ASCII básica.
 
-1. Inicializamos `left = 0` e `right = s.size() - 1`.
-2. Enquanto `left < right`:
-   - Ignoramos pontuação e espaços à esquerda com `std::isalnum(static_cast<unsigned char>(s[left]))`.
-   - Ignoramos pontuação e espaços à direita da mesma forma.
-   - Se os caracteres normalizados em minúsculo divergirem, retornamos `false`.
-   - Avançamos ambos (`++left`, `--right`).
-3. Se os ponteiros se cruzarem sem divergência, a string é um palíndromo (`true`).
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — cada caractere da string é visitado no máximo uma vez.
-- **Espaço:** $O(1)$ — nenhuma string auxiliar é alocada.
+- **Tempo:** $O(n)$ — cada caractere da string é inspecionado no máximo uma vez.
+- **Espaço:** $O(1)$ — comparação direta sobre a string de entrada, sem alocações adicionais.

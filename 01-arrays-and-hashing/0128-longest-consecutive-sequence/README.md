@@ -1,26 +1,22 @@
-# 128. Longest Consecutive Sequence
+# 0128 · Longest Consecutive Sequence
 
-- **Nível:** Intermediário ([LeetCode #128](https://leetcode.com/problems/longest-consecutive-sequence/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Conjunto Hash (*Hash Set* — `std::unordered_set`)
-  - **Padrão Algorítmico:** *Sequence Start Detection* (Início de Sequência em Conjunto Hash para Varredura Amortizada $O(n)$)
+**Dificuldade:** Intermediário | **Categoria:** Arrays & Hashing | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor não ordenado de inteiros `nums`, retornar o comprimento da maior sequência de valores inteiros consecutivos em tempo $O(n)$.
 
-Ordenar o vetor resolveria o problema em $O(n \log n)$, mas o enunciado exige **$O(n)$ estrito**.
+## Abordagem
 
-Se colocarmos todos os números em um `std::unordered_set<int> numSet` e tentarmos contar a sequência a partir de **qualquer** número $x$, gastaríamos $O(n^2)$ recontando sufixos da mesma sequência várias vezes (ex.: contando `1,2,3,4`, depois `2,3,4`, depois `3,4`).
+Ordenar o vetor custaria $O(n \log n)$. Para manter complexidade linear média, `longestConsecutive` insere todos os valores em um `std::unordered_set<int>` (`numSet`) e identifica apenas os **inícios reais** de cada sequência:
 
-O truque do padrão **Sequence Start Detection** é uma única linha de filtro:
-> Um número $x$ só é o **início** de uma sequência consecutiva se **$x - 1$ NÃO existir no conjunto** (`!numSet.count(x - 1)`).
+1. Iterando sobre cada `num` em `numSet`, verifica-se se `num - 1` está ausente do conjunto (`numSet.find(num - 1) == numSet.end()`).
+2. Apenas quando `num - 1` não existe (ou seja, `num` é o menor elemento de uma cadeia consecutiva) inicia-se um laço `while` incrementando `currentNum` e `currentStreak` enquanto `currentNum + 1` existir em `numSet`.
+3. O maior comprimento observado é mantido em `longest`.
 
-Ao disparar o laço `while (numSet.count(curr + 1))` **apenas** para inícios de sequência, cada número do conjunto é visitado pelo `while` interno **no máximo uma única vez** em toda a execução!
+Como cada elemento do conjunto é visitado pelo `while` interno no máximo uma vez durante toda a execução, evita-se o retrabalho quadrático sobre subcadeias já percorridas.
 
----
+## Complexidade
 
-## 2. Complexidade
-
-- **Tempo:** $O(n)$ amortizado — cada elemento é inspecionado um número constante de vezes.
-- **Espaço:** $O(n)$ para armazenar os elementos únicos no `unordered_set`.
+- **Tempo:** $O(n)$ médio — inserção em `numSet` e avanço de cada elemento por no máximo uma cadeia consecutiva.
+- **Espaço:** $O(n)$ — armazenamento dos elementos únicos em `numSet`.

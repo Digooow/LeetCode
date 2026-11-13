@@ -1,39 +1,25 @@
-# 76. Minimum Window Substring
+# 0076 · Minimum Window Substring
 
-- **Nível:** Difícil / Hard ([LeetCode #76](https://leetcode.com/problems/minimum-window-substring/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Expand-and-Contract Sliding Window with Frequency Deficit Counter* (Janela Deslizante de Expansão e Contração com Contador de Déficit)
+**Dificuldade:** Difícil (Hard) | **Categoria:** Sliding Window | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dadas duas strings `s` e `t`, retornar a menor substring contígua de `s` que contenha todos os caracteres de `t` (incluindo multiplicidade). Caso não exista tal janela, retornar `""`.
 
-Este é o problema canônico de **Sliding Window de Nível Hard**. Precisamos encontrar a menor substring de `s` que contenha todos os caracteres de `t` (incluindo suas multiplicidades).
+## Abordagem
 
-Para evitar comparar dois mapas de 128 posições a cada passo, usamos um **Contador de Déficit (`missing`)**:
-- Inicializamos `need[c]` com a frequência de cada caractere de `t`, e `missing = t.size()`.
-- **Fase de Expansão (`right++`):** Ao incluir `s[right]`, se `need[s[right]] > 0`, significa que esse caractere era necessário $\rightarrow$ decrementamos `--missing`. De qualquer forma, fazemos `--need[s[right]]` (valores negativos em `need` indicam excesso daquele caractere na janela).
-- **Fase de Contração (`while (missing == 0)`):** Enquanto a janela for válida (`missing == 0`), tentamos atualizar a menor janela vista e encolher `left++` devolvendo `++need[s[left]]`. Se `need[s[left]] > 0`, perdemos um caractere essencial e incrementamos `++missing`.
+`minWindow` trata primeiro o caso trivial `t.empty() || s.size() < t.size()` e constrói uma tabela `std::array<int, 128> need{}` com a frequência exigida de cada caractere ASCII de `t`, além do contador agregado `missing = t.size()`.
 
----
+O algoritmo alterna expansão e contração da janela `[left, right]`:
+1. **Expansão (`right`):** se `need[rChar] > 0`, o caractere reduz o déficit restante (`--missing`). Em seguida decrementa-se `need[rChar]` (caracteres em excesso assumem valores negativos para rastrear sobra).
+2. **Contração (`while (missing == 0)`):** enquanto a janela cobre todo `t`:
+   - Atualiza `bestLen` e `bestStart` se `right - left + 1 < bestLen`.
+   - Devolve `lChar` incrementando `need[lChar]`; se `need[lChar]` passar a ser $> 0$, o caractere removido era essencial (não havia excedente), logo `++missing` e o laço de contração encerra.
+   - Avança `++left`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+Por fim, retorna `""` se `bestLen == INT_MAX`, ou `s.substr(bestStart, bestLen)`.
 
-1. Contamos as frequências de `t` em `std::array<int, 128> need{}` e definimos `missing = t.size()`.
-2. Mantemos `left = 0`, `bestStart = 0` e `bestLen = INT_MAX`.
-3. Avançamos `right` de `0` a `s.size() - 1`:
-   - Se `need[s[right]] > 0`, decrementamos `--missing`.
-   - Decrementamos `--need[s[right]]`.
-   - Enquanto `missing == 0`:
-     - Se `right - left + 1 < bestLen`, atualizamos `bestLen` e `bestStart = left`.
-     - Incrementamos `++need[s[left]]`.
-     - Se `need[s[left]] > 0`, incrementamos `++missing`.
-     - Avançamos `++left`.
-4. Se `bestLen == INT_MAX`, retornamos `""`; senão, `s.substr(bestStart, bestLen)`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(|s| + |t|)$ — tanto `right` quanto `left` avançam no máximo $|s|$ vezes (análise amortizada).
-- **Espaço:** $O(1)$ — array fixo de 128 inteiros para a tabela ASCII.
+- **Tempo:** $O(|s| + |t|)$ — cada caractere de `s` é processado no máximo uma vez por `right` e uma vez por `left`.
+- **Espaço:** $O(1)$ auxiliar — vetor fixo `std::array<int, 128>` para frequências ASCII.

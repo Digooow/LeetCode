@@ -1,23 +1,22 @@
-# 136. Single Number
+# 0136 · Single Number
 
-- **Nível:** Fácil ([LeetCode #136](https://leetcode.com/problems/single-number/))
-- **Classificação do Conceito:**
-  - **Técnica Algorítmica:** *Bitwise XOR Cancellation* (Cancelamento Algébrico por OU-Exclusivo Bit a Bit)
+**Dificuldade:** Fácil | **Categoria:** Bit Manipulation | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor não vazio de inteiros `nums` em que todos os elementos aparecem exatamente duas vezes exceto um único elemento isolado, encontrá-lo em tempo $O(n)$ e espaço auxiliar $O(1)$.
 
-O operador **XOR (`^`)** satisfaz três identidades algébricas fundamentais:
-1. $x \oplus 0 = x$ (identidade)
-2. $x \oplus x = 0$ (auto-anulação)
-3. $x \oplus y = y \oplus x$ e $(x \oplus y) \oplus z = x \oplus (y \oplus z)$ (comutatividade e associatividade)
+## Abordagem
 
-Se todos os números do vetor aparecem **duas vezes** e apenas um número $u$ aparece **uma única vez**, o XOR acumulado de todos os elementos agrupa e anula todos os pares ($a \oplus a = 0$), restando $0 \oplus u = u$.
+`singleNumber` acumula o operador ou-exclusivo (`^`) sobre todos os elementos em `xorSum`:
 
----
+- Identidade: $x \oplus 0 = x$
+- Auto-inversão: $x \oplus x = 0$
+- Comutatividade e associatividade: a ordem dos elementos não altera o resultado final.
 
-## 2. Complexidade
+Todos os pares idênticos anulam-se mutuamente para zero, restando em `xorSum` apenas o inteiro de frequência ímpar.
 
-- **Tempo:** $O(n)$ — uma única passagem com instrução nativa de CPU.
-- **Espaço:** $O(1)$ — uma única variável acumuladora.
+## Complexidade
+
+- **Tempo:** $O(n)$ — travessia linear única aplicando uma operação bit a bit por elemento.
+- **Espaço:** $O(1)$ — apenas o acumulador inteiro `xorSum`.

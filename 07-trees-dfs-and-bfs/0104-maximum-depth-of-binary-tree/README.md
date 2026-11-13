@@ -1,22 +1,18 @@
-# 104. Maximum Depth of Binary Tree
+# 0104 · Maximum Depth of Binary Tree
 
-- **Nível:** Fácil ([LeetCode #104](https://leetcode.com/problems/maximum-depth-of-binary-tree/))
-- **Classificação do Conceito:**
-  - **Algoritmo:** *Post-Order DFS (Bottom-Up Tree Recursion)* (Busca em Profundidade Pós-Ordem)
+**Dificuldade:** Fácil | **Categoria:** Trees (DFS & BFS) | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada a raiz `root` de uma árvore binária, retornar a profundidade máxima (número de nós ao longo do caminho mais longo da raiz até a folha mais distante).
 
-A profundidade máxima de uma árvore enraizada em `root` obedece à relação de recorrência:
+## Abordagem
 
-$$\text{depth}(\text{root}) = \begin{cases} 0, & \text{se } \text{root} = \text{nullptr} \\ 1 + \max\big(\text{depth}(\text{root}\to\text{left}),\ \text{depth}(\text{root}\to\text{right})\big), & \text{caso contrário} \end{cases}$$
+A profundidade de qualquer subárvore segue a definição recursiva: uma árvore vazia possui profundidade `0`, e uma árvore não vazia possui profundidade `1 + std::max(maxDepth(root->left), maxDepth(root->right))`.
 
-Essa abordagem é chamada de **DFS Pós-Ordem (*Bottom-Up*)**: primeiro descemos até as folhas, calculamos a altura da subárvore esquerda e da subárvore direita, e só então combinamos os resultados no nó pai somando `1`.
+`maxDepth` calcula as alturas das subárvores esquerda e direita em pós-ordem (*bottom-up*) e retorna o maior caminho acrescentado da raiz corrente.
 
----
+## Complexidade
 
-## 2. Complexidade
-
-- **Tempo:** $O(n)$ — visita cada nó exatamente uma vez.
-- **Espaço:** $O(h)$ — espaço na pilha de chamadas proporcional à altura $h$ da árvore.
+- **Tempo:** $O(n)$ — cada um dos $n$ nós é visitado exatamente uma vez.
+- **Espaço:** $O(h)$ — espaço de pilha da recursão proporcional à altura $h$ da árvore ($O(\log n)$ no caso balanceado, $O(n)$ no pior caso linear).

@@ -1,20 +1,19 @@
-# 733. Flood Fill
+# 0733 · Flood Fill
 
-- **Nível:** Fácil ([LeetCode #733](https://leetcode.com/problems/flood-fill/))
-- **Classificação do Conceito:**
-  - **Algoritmo:** *Flood Fill via Grid DFS* (Preenchimento por Inundação em Grafo de Matriz 2D)
+**Dificuldade:** Fácil | **Categoria:** Graphs & Topological Sort | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada uma matriz inteira `image` representando pixels, uma coordenada inicial `(sr, sc)` e uma nova cor `color`, substituir a cor de todos os pixels conectados ortogonalmente ao ponto inicial que compartilhem sua cor original.
 
-O algoritmo **Flood Fill** (o famoso "balde de tinta" de editores gráficos) modela uma matriz 2D como um **grafo implícito**, onde cada pixel `(r, c)` tem até 4 arestas (cima, baixo, esquerda, direita) conectando-o a pixels adjacentes de mesma cor inicial (`originalColor`).
+## Abordagem
 
-Um detalhe crucial de borda (*edge case*): se `image[sr][sc] == color` (a nova cor já é idêntica à cor original), devemos retornar imediatamente; caso contrário, a recursão entraria em loop infinito entre dois pixels vizinhos!
+Em `floodFill`, registra-se `originalColor = image[sr][sc]` e executa-se o DFS recursivo apenas quando `originalColor != color`:
 
----
+- **Guarda contra loop infinito:** se `originalColor == color`, nenhuma alteração é necessária e o retorno imediato evita recursão infinita entre pixels já coloridos com o valor alvo.
+- O auxiliar `dfs` verifica os limites da matriz e se `image[r][c] == originalColor`, atribui `newColor` e avança nos 4 vizinhos ortogonais.
 
-## 2. Complexidade
+## Complexidade
 
-- **Tempo:** $O(R \times C)$, onde $R$ é o número de linhas e $C$ o número de colunas (cada célula é pintada no máximo uma vez).
-- **Espaço:** $O(R \times C)$ no pior caso na pilha de chamadas da DFS.
+- **Tempo:** $O(M \cdot N)$ — no pior caso, todos os pixels da imagem $M \times N$ compartilham `originalColor` e são visitados uma vez.
+- **Espaço:** $O(M \cdot N)$ — pilha de recursão no pior caso de preenchimento completo da grade (além da cópia do parâmetro `image`).

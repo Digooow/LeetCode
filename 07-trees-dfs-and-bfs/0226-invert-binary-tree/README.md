@@ -1,21 +1,20 @@
-# 226. Invert Binary Tree
+# 0226 · Invert Binary Tree
 
-- **Nível:** Fácil ([LeetCode #226](https://leetcode.com/problems/invert-binary-tree/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Árvore Binária (*Binary Tree*)
-  - **Algoritmo:** *Recursive Depth-First Search (DFS)* (Busca em Profundidade Recursiva)
+**Dificuldade:** Fácil | **Categoria:** Trees (DFS & BFS) | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada a raiz `root` de uma árvore binária, espelhar a árvore trocando os filhos esquerdo e direito em toda a estrutura e retornar a raiz.
 
-Inverter (espelhar) uma árvore binária significa trocar as subárvores esquerda e direita de **todos** os nós da árvore. Como uma árvore binária possui definição indutiva/recursiva, aplicamos **Recursão Estrutural**:
-- **Caso base:** Se `root == nullptr`, retornamos `nullptr`.
-- **Passo indutivo:** Trocamos `std::swap(root->left, root->right)` e invertemos recursivamente `root->left` e `root->right`.
+## Abordagem
 
----
+`invertTree` realiza um percurso DFS recursivo em pré-ordem:
 
-## 2. Complexidade
+1. Caso base: `root == nullptr` retorna `nullptr`.
+2. Troca os ponteiros dos filhos diretos da raiz atual com `std::swap(root->left, root->right)`.
+3. Aplica a inversão recursivamente sobre `root->left` e `root->right` e devolve `root`.
 
-- **Tempo:** $O(n)$, onde $n$ é o número de nós da árvore (cada nó é visitado uma única vez).
-- **Espaço:** $O(h)$, onde $h$ é a altura da árvore (profundidade máxima da pilha de recursão: $O(\log n)$ em árvore balanceada e $O(n)$ em árvore degenerada).
+## Complexidade
+
+- **Tempo:** $O(n)$ — exatamente uma visita e uma troca de ponteiros por nó.
+- **Espaço:** $O(h)$ — profundidade máxima da pilha de recursão igual à altura $h$ da árvore ($O(n)$ no pior caso degenerado).

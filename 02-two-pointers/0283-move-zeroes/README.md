@@ -1,32 +1,22 @@
-# 283. Move Zeroes
+# 0283 · Move Zeroes
 
-- **Nível:** Fácil ([LeetCode #283](https://leetcode.com/problems/move-zeroes/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *In-Place Stable Partitioning via Slow/Fast Pointers* (Particionamento Estável *In-Place* com Dois Ponteiros)
+**Dificuldade:** Fácil | **Categoria:** Two Pointers | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros `nums`, mover todos os `0` para o final *in-place*, mantendo a ordem relativa dos elementos não nulos.
 
-Mover todos os zeros para o final preservando a ordem relativa dos elementos não nulos é exatamente a operação de **Particionamento Estável (*Stable Partition*)** usada na biblioteca padrão (`std::stable_partition`) e semelhante à etapa de partição de Lomuto do *QuickSort*.
+## Abordagem
 
-Mantemos um ponteiro `nonZeroPos` (ponteiro lento) que marca a fronteira entre elementos não-zero já processados e os zeros acumulados:
-- Sempre que o ponteiro rápido `i` encontra `nums[i] != 0`, fazemos `std::swap(nums[nonZeroPos], nums[i])` e avançamos `++nonZeroPos`.
+`moveZeroes` implementa um particionamento estável *in-place* usando dois ponteiros na mesma direção:
 
----
+- `nonZeroPos` marca o fim da partição de elementos não nulos já posicionados corretamente.
+- O índice `i` percorre todo o vetor `nums`.
+- Quando `nums[i] != 0`, executa-se `std::swap(nums[nonZeroPos], nums[i])` e incrementa-se `nonZeroPos`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+Ao término do laço, todos os elementos não nulos ocupam `nums[0 .. nonZeroPos - 1]` na ordem original e os zeros restantes permanecem contíguos a partir de `nonZeroPos`.
 
-Para `nums = [0, 1, 0, 3, 12]`:
-1. `i = 0` (`0`): ignorado (`nonZeroPos = 0`).
-2. `i = 1` (`1 != 0`): `swap(nums[0], nums[1])` $\rightarrow$ `[1, 0, 0, 3, 12]`, `nonZeroPos = 1`.
-3. `i = 2` (`0`): ignorado (`nonZeroPos = 1`).
-4. `i = 3` (`3 != 0`): `swap(nums[1], nums[3])` $\rightarrow$ `[1, 3, 0, 0, 12]`, `nonZeroPos = 2`.
-5. `i = 4` (`12 != 0`): `swap(nums[2], nums[4])` $\rightarrow$ `[1, 3, 12, 0, 0]`, `nonZeroPos = 3`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — número mínimo de escritas e uma única varredura.
-- **Espaço:** $O(1)$ — executado *in-place*.
+- **Tempo:** $O(n)$ — uma passagem única pelo vetor com trocas em $O(1)$.
+- **Espaço:** $O(1)$ — modificação direta sobre `nums`.

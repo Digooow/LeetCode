@@ -1,22 +1,22 @@
-# 06 · Linked List & Fast/Slow Pointers (Listas Encadeadas e Tartaruga e Lebre)
+# 06 · Linked List & Fast/Slow Pointers (Listas Encadeadas)
 
-## Qual é o nome correto desse conceito?
+## Estruturas e Padrões
 
-1. **Estrutura de Dados: Lista Encadeada (*Singly Linked List*)**
-   - Uma estrutura linear dinâmica composta por nós alocados individualmente, onde cada nó guarda um valor (`val`) e um ponteiro (`next`) para o próximo nó. Diferente do array, não há acesso indexado $O(1)$, mas inserções e religações de ponteiros locais custam $O(1)$.
-2. **Padrões Algorítmicos para Listas Encadeadas:**
-   - **Inversão de Ponteiros com 3 Variáveis (*Three-Pointer In-Place Reversal*):** Manter `prev`, `curr` e `nextTemp` para inverter as setas da lista em $O(n)$ tempo e $O(1)$ espaço.
-   - **Nó Sentinela (*Dummy Head / Sentinel Node*):** Criar um nó artificial na *stack* antes da cabeça da lista de saída para eliminar `if/else` especiais de lista vazia.
-   - **Ponteiros Rápido e Lento (*Fast & Slow Pointers* / Algoritmo de Detecção de Ciclo de Floyd — *Tortoise and Hare*):** Avançar `slow` de 1 em 1 e `fast` de 2 em 2. Se houver um ciclo, eles obrigatoriamente se encontram dentro do ciclo em $O(n)$ tempo e $O(1)$ espaço; se não houver ciclo, `fast` chega a `nullptr` (e `slow` estará exatamente no meio da lista!).
-   - **Fusão de $k$ Sequências Ordenadas (*K-Way Merge via Min-Heap*):** Usar uma fila de prioridade mínima (`std::priority_queue`) contendo o menor nó disponível de cada uma das $k$ listas para extrair o mínimo global em $O(\log k)$.
+1. **Lista Simplesmente Encadeada (*Singly Linked List*):**
+   - Estrutura linear dinâmica composta por nós alocados individualmente, contendo um valor (`val`) e um ponteiro (`next`). Não oferece acesso indexado em $O(1)$, mas permite religação local de ponteiros em $O(1)$ sem realocação contígua.
+2. **Padrões Utilizados:**
+   - **Inversão *In-Place* com Três Ponteiros:** uso de `prev`, `curr` e `nextTemp` para reverter ligações em $O(n)$ tempo e $O(1)$ espaço.
+   - **Nó Sentinela (*Dummy Head*):** alocação de um nó auxiliar na *stack* antes da cabeça da lista resultante para eliminar ramificações especiais no primeiro elemento.
+   - **Ponteiros Rápido e Lento (*Fast & Slow Pointers* / Algoritmo de Floyd):** `slow` avança 1 nó e `fast` avança 2 nós por iteração. Havendo ciclo, os ponteiros colidem em $O(n)$ tempo e $O(1)$ espaço; caso contrário, `fast` alcança `nullptr`.
+   - **Fusão de $k$ Listas Ordenadas (*K-Way Merge* via *Min-Heap*):** fila de prioridade mínima (`std::priority_queue`) mantendo apenas o menor nó ativo de cada lista, com extração em $O(\log k)$.
 
 ---
 
-## Problemas nesta pasta
+## Problemas
 
-| Problema | Dificuldade | Conceito / Padrão Principal |
+| Problema | Dificuldade | Padrão Principal |
 |---|---|---|
 | [0206 - Reverse Linked List](./0206-reverse-linked-list/README.md) | Fácil | Inversão Iterativa de Ponteiros *In-Place* |
-| [0021 - Merge Two Sorted Lists](./0021-merge-two-sorted-lists/README.md) | Fácil | Mesclagem Ordenada com Nó Sentinela (*Dummy Node*) |
-| [0141 - Linked List Cycle](./0141-linked-list-cycle/README.md) | Fácil | Algoritmo de Floyd (*Fast & Slow Pointers*) |
+| [0021 - Merge Two Sorted Lists](./0021-merge-two-sorted-lists/README.md) | Fácil | Mesclagem Ordenada com Nó Sentinela |
+| [0141 - Linked List Cycle](./0141-linked-list-cycle/README.md) | Fácil | Detecção de Ciclo de Floyd (*Fast & Slow Pointers*) |
 | [0023 - Merge k Sorted Lists](./0023-merge-k-sorted-lists/README.md) | Difícil (Hard) | *K-Way Merge* com *Min-Heap* (`std::priority_queue`) |

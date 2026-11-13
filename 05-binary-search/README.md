@@ -1,22 +1,21 @@
-# 05 · Binary Search (Algoritmo de Busca Binária e Redução Logarítmica)
+# 05 · Binary Search (Busca Binária)
 
-## Qual é o nome correto desse conceito?
+## Visão Geral
 
-**Binary Search (Busca Binária)** é um **Algoritmo Clássico (*Search Algorithm*)** baseado no paradigma de **Divisão e Conquista (*Divide and Conquer*)** (mais especificamente *Decrease and Conquer*).
+**Binary Search** aplica redução de espaço de busca (*Decrease and Conquer*) sobre domínios com propriedade monotônica. Ao descartar metade do intervalo válido em cada iteração, reduz a busca de $O(n)$ para **$O(\log_2 n)$**.
 
-Ele opera sobre qualquer espaço de busca que possua uma **propriedade monotônica**: se conseguimos descartar metade do espaço de busca a cada comparação, reduzimos o número de operações de $O(n)$ para **$O(\log_2 n)$** (para $n = 1.000.000.000$, $\log_2 n \approx 30$ passos!).
+## Pontos Críticos de Implementação
 
-Três detalhes que diferenciam candidatos seniores ao implementar Busca Binária:
-1. **Prevenção de *Integer Overflow* no cálculo do meio:** Sempre calcule `mid = left + (right - left) / 2` em vez de `(left + right) / 2`.
-2. **Busca de Limite Inferior (*Lower Bound*):** Encontrar o primeiro índice $i$ tal que $\text{nums}[i] \ge \text{target}$ (equivalente a `std::lower_bound`).
-3. **Busca Binária em Array Parcialmente Ordenado (Rotacionado):** Mesmo quando um array ordenado sofreu rotação, **pelo menos uma das duas metades (`[left..mid]` ou `[mid..right]`) continua estritamente ordenada**, permitindo decidir qual metade descartar em $O(1)$.
+1. **Cálculo de ponto médio sem *Integer Overflow*:** utilizar `left + (right - left) / 2` em vez de `(left + right) / 2`.
+2. **Busca de Limite Inferior (*Lower Bound*):** retornar o primeiro índice em que $\text{nums}[i] \ge \text{target}$, preservando a invariante de intervalo fechado `[left, right]` para que `left` aponte exatamente para a posição de inserção ao final do laço.
+3. **Arrays Rotacionados:** em qualquer partição `[left..right]` de um array ordenado rotacionado sem duplicatas, ao menos uma das metades (`[left..mid]` ou `[mid..right]`) permanece ordenada, permitindo decidir qual lado descartar em $O(1)$.
 
 ---
 
-## Problemas nesta pasta
+## Problemas
 
-| Problema | Dificuldade | Variante de Busca Binária |
+| Problema | Dificuldade | Variante |
 |---|---|---|
-| [0704 - Binary Search](./0704-binary-search/README.md) | Fácil | Busca Binária Exata Clássica |
+| [0704 - Binary Search](./0704-binary-search/README.md) | Fácil | Busca Binária Exata em Intervalo Fechado |
 | [0035 - Search Insert Position](./0035-search-insert-position/README.md) | Fácil | Busca Binária *Lower Bound* |
-| [0033 - Search in Rotated Sorted Array](./0033-search-in-rotated-sorted-array/README.md) | Intermediário | Busca Binária por Identificação de Metade Ordenada |
+| [0033 - Search in Rotated Sorted Array](./0033-search-in-rotated-sorted-array/README.md) | Intermediário | Identificação de Metade Ordenada em Array Rotacionado |

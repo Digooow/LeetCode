@@ -1,33 +1,20 @@
-# 121. Best Time to Buy and Sell Stock
+# 0121 · Best Time to Buy and Sell Stock
 
-- **Nível:** Fácil ([LeetCode #121](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Dynamic Sliding Window / Running Minimum Tracking* (Janela Deslizante com Rastreamento do Mínimo Histórico)
+**Dificuldade:** Fácil | **Categoria:** Sliding Window | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor `prices` onde `prices[i]` representa o preço de um ativo no dia `i`, retornar o lucro máximo obtido com uma única compra e uma única venda posterior ($i_{\text{venda}} > i_{\text{compra}}$). Caso nenhum lucro seja possível, retornar `0`.
 
-Queremos maximizar $\text{prices}[right] - \text{prices}[left]$ sujeito à restrição temporal $left < right$ (você precisa comprar antes de vender).
+## Abordagem
 
-Em termos de **Sliding Window**:
-- `left` representa o dia da compra (o menor preço visto até agora).
-- `right` representa o dia da venda que estamos avaliando hoje.
-- Se encontramos um dia `right` cujo preço é **menor** que o preço de compra em `left`, deslizamos imediatamente a ponta esquerda da janela para `right` (`minPrice = prices[right]`), pois qualquer venda futura terá lucro estritamente maior comprando nesse novo fundo histórico.
+Após verificar `prices.empty()`, `maxProfit` mantém o menor preço de compra observado até o dia corrente (`minPrice = prices[0]`) e o maior lucro alcançado (`bestProfit = 0`).
 
----
+Para cada `price` em `prices`:
+1. Atualiza `minPrice = std::min(minPrice, price)`, deslocando implicitamente o ponto esquerdo da janela de compra caso surja uma mínima histórica menor.
+2. Atualiza `bestProfit = std::max(bestProfit, price - minPrice)`, avaliando o ganho caso a venda ocorra no dia atual.
 
-## 2. Explicação do Algoritmo Passo a Passo
+## Complexidade
 
-1. Inicializamos `minPrice = prices[0]` e `maxProfit = 0`.
-2. Para cada preço `price` em `prices`:
-   - Se `price < minPrice`, atualizamos `minPrice = price`.
-   - Caso contrário, calculamos o lucro potencial `price - minPrice` e atualizamos `maxProfit`.
-3. Retornamos `maxProfit`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — uma única passagem pelo vetor de preços.
-- **Espaço:** $O(1)$ — apenas duas variáveis inteiras.
+- **Tempo:** $O(n)$ — passagem linear única por `prices`.
+- **Espaço:** $O(1)$ — apenas as variáveis escalares `minPrice` e `bestProfit`.

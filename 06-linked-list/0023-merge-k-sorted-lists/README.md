@@ -1,36 +1,22 @@
-# 23. Merge k Sorted Lists
+# 0023 · Merge k Sorted Lists
 
-- **Nível:** Difícil / Hard ([LeetCode #23](https://leetcode.com/problems/merge-k-sorted-lists/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Fila de Prioridade Mínima (*Min-Heap* — `std::priority_queue`)
-  - **Padrão Algorítmico:** *K-Way Merge* (Intercalação de $k$ Sequências Ordenadas)
+**Dificuldade:** Difícil (Hard) | **Categoria:** Linked List | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito e onde ele aparece em Backend / Sistemas Distribuídos?
+Dado um vetor contendo $k$ listas simplesmente encadeadas já ordenadas em ordem crescente, mesclar todas em uma única lista ordenada.
 
-Em engenharia de software real (como **LSM-Trees** no RocksDB/Cassandra, **External Merge Sort** no PostgreSQL ou agregação de resultados paginados vindos de $k$ *shards*), frequentemente temos $k$ fluxos que já estão individualmente ordenados e precisamos unificá-los em um único fluxo globalmente ordenado.
+## Abordagem
 
-Se compararmos as $k$ cabeças linearmente a cada passo, gastamos $O(N \cdot k)$ (onde $N$ é o total de nós). Ao manter as $k$ cabeças ativas dentro de uma **Min-Heap (`std::priority_queue` com comparador `>`)**:
-- Consultar e extrair o menor elemento entre as $k$ listas custa apenas **$O(\log k)$**!
-- Assim que extraímos o nó `smallest` da *Min-Heap*, se `smallest->next != nullptr`, inserimos `smallest->next` na *Min-Heap* em $O(\log k)$.
+Combinar as $k$ listas sequencialmente uma a uma degradaria para $O(N \cdot k)$, onde $N$ é o número total de nós. Para reduzir esse fator de $k$ para $\log k$, `mergeKLists` executa um *K-Way Merge* apoiado por uma *min-heap*:
 
----
+1. Define o comparador `MinNodeCompare` (`a->val > b->val`) para inverter o comportamento padrão de *max-heap* de `std::priority_queue`.
+2. Insere em `minHeap` apenas os ponteiros iniciais não nulos de `lists`.
+3. Mantém um nó sentinela `ListNode dummy(0)` e `tail = &dummy`. Enquanto `minHeap` não estiver vazia:
+   - Extrai o nó de menor valor global `smallest = minHeap.top()` e o conecta em `tail->next`.
+   - Se `smallest->next != nullptr`, insere o sucessor de volta na *heap*, mantendo no máximo $k$ elementos simultaneamente na fila de prioridade.
 
-## 2. Explicação do Algoritmo Passo a Passo
+## Complexidade
 
-1. Definimos um functor `Compare` que ordena ponteiros `ListNode*` pelo maior `val` (para que o topo da `priority_queue` do C++ seja o **menor** `val`, funcionando como *Min-Heap*).
-2. Inserimos na *Min-Heap* o primeiro nó de cada lista não vazia ($O(k \log k)$).
-3. Criamos um nó sentinela `ListNode dummy(0)` e `tail = &dummy`.
-4. Enquanto a *Min-Heap* não estiver vazia:
-   - Extraímos `curr = pq.top(); pq.pop();`
-   - Anexamos `tail->next = curr; tail = tail->next;`
-   - Se `curr->next != nullptr`, fazemos `pq.push(curr->next)`.
-5. Retornamos `dummy.next`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(N \log k)$, onde $N$ é o número total de nós somando todas as listas e $k$ é o número de listas.
-- **Espaço Auxiliar:** $O(k)$ — a *Min-Heap* armazena no máximo $k$ ponteiros simultaneamente.
+- **Tempo:** $O(N \log k)$ — onde $N$ é o total de nós somados entre todas as $k$ listas; cada nó entra e sai de uma *heap* de tamanho máximo $k$ exatamente uma vez.
+- **Espaço:** $O(k)$ — espaço ocupado por `minHeap` ao manter no máximo um representante ativo por lista.

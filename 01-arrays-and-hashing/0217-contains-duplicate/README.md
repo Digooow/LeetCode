@@ -1,34 +1,18 @@
-# 217. Contains Duplicate
+# 0217 · Contains Duplicate
 
-- **Nível:** Fácil ([LeetCode #217](https://leetcode.com/problems/contains-duplicate/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Conjunto Hash (*Hash Set* — `std::unordered_set`)
-  - **Padrão Algorítmico:** *Early-Exit Set Membership Check* (Verificação de Pertinência com Saída Antecipada)
+**Dificuldade:** Fácil | **Categoria:** Arrays & Hashing | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros `nums`, retornar `true` caso algum valor apareça pelo menos duas vezes, ou `false` se todos os elementos forem distintos.
 
-Um **Conjunto Hash (`std::unordered_set`)** modela a noção matemática de conjunto: uma coleção não ordenada de elementos únicos. Sob o capô, ele utiliza uma tabela de dispersão (*hash table*) onde cada valor inserido passa por uma função de hash para determinar seu *bucket*.
+## Abordagem
 
-Existem três abordagens clássicas para detectar duplicatas, e saber compará-las em entrevistas mostra maturidade:
-1. **Força Bruta:** Comparar todos os pares $\rightarrow$ Tempo $O(n^2)$, Espaço $O(1)$.
-2. **Ordenação (*Sorting*):** Ordenar o array e comparar elementos adjacentes `nums[i] == nums[i - 1]` $\rightarrow$ Tempo $O(n \log n)$, Espaço $O(1)$.
-3. **Hash Set (Ótima em Tempo):** Inserir cada elemento em um `unordered_set` e abortar assim que `insert()` indicar que o elemento já existia $\rightarrow$ Tempo $O(n)$, Espaço $O(n)$.
+`containsDuplicate` utiliza um `std::unordered_set<int>` (`seen`) com capacidade pré-alocada via `seen.reserve(nums.size())` para reduzir realocações de tabela hash.
 
----
+Para cada `num` em `nums`, executa-se `seen.insert(num)`. O método `insert` retorna um `std::pair<iterator, bool>` cujo campo `.second` indica se uma nova chave foi inserida: se `.second` for `false`, o elemento já estava presente em `seen`, permitindo retorno imediato `true`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+## Complexidade
 
-1. Instanciamos `std::unordered_set<int> seen` e reservamos capacidade (`seen.reserve(nums.size())`) para evitar *rehashes*.
-2. Para cada número `x` em `nums`:
-   - Em C++, `seen.insert(x)` retorna um `std::pair<iterator, bool>` onde `.second` é `false` se o elemento já estava presente no conjunto.
-   - Se `!seen.insert(x).second`, retornamos `true` imediatamente (*early exit*).
-3. Se o laço terminar sem colisão, retornamos `false`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ no caso médio (cada `insert` em tabela hash é $O(1)$ amortizado).
-- **Espaço:** $O(n)$ no pior caso (quando todos os elementos são distintos).
+- **Tempo:** $O(n)$ médio — até $n$ inserções com custo médio constante $O(1)$ e saída antecipada na primeira colisão de valor.
+- **Espaço:** $O(n)$ — armazenamento de até $n$ elementos distintos em `seen`.

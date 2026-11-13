@@ -1,32 +1,22 @@
-# 242. Valid Anagram
+# 0242 · Valid Anagram
 
-- **Nível:** Fácil ([LeetCode #242](https://leetcode.com/problems/valid-anagram/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** *Fixed-Size Frequency Array* (Vetor de Frequências de Tamanho Fixo / *Direct Addressing Table*)
-  - **Padrão Algorítmico:** *Frequency Balance Counting* (Balanço de Frequências)
+**Dificuldade:** Fácil | **Categoria:** Arrays & Hashing | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dadas duas strings `s` e `t` compostas por letras minúsculas ASCII (`'a'` a `'z'`), retornar `true` se `t` for um anagrama de `s`, ou `false` caso contrário.
 
-Quando o domínio das chaves é pequeno e contíguo (por exemplo, letras minúsculas de `'a'` a `'z'`, totalizando 26 símbolos), usar `std::unordered_map<char, int>` adiciona custo desnecessário de alocação dinâmica e cálculo de hash.
+## Abordagem
 
-Na Ciência da Computação, substituir um Hash Map por um array indexado diretamente pelo código do caractere (`c - 'a'`) chama-se **Tabela de Endereçamento Direto (*Direct Addressing Table*)** ou **Vetor de Frequências (*Frequency Bucket Array*)**. Ele garante acesso $O(1)$ estrito (sem colisões de hash) e complexidade espacial $O(1)$ ($26 \text{ inteiros}$ na *stack*).
+Após validar rapidamente se `s.size() != t.size()` (condição eliminatória em $O(1)$), `isAnagram` utiliza um vetor estático `std::array<int, 26> freq{}` alocado na *stack* para contabilizar o saldo líquido de cada caractere.
 
----
+Em uma única travessia de índice `i`:
+- Incrementa-se `freq[s[i] - 'a']`.
+- Decrementa-se `freq[t[i] - 'a']`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+Se `s` e `t` possuem exatamente a mesma multiconjunto de caracteres, todas as 26 posições de `freq` encerram com valor `0`.
 
-1. **Poda por tamanho:** Se `s.size() != t.size()`, é impossível serem anagramas $\rightarrow$ retorna `false` em $O(1)$.
-2. Criamos um array `std::array<int, 26> freq{}` inicializado com zeros.
-3. Percorremos o índice `i` de `0` até `s.size() - 1`:
-   - Incrementamos `freq[s[i] - 'a']++` (letra fornecida por `s`).
-   - Decrementamos `freq[t[i] - 'a']--` (letra consumida por `t`).
-4. Ao final, se `s` e `t` possuem exatamente a mesma multiconjunto de caracteres, todas as 26 posições de `freq` devem ser `0`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$, onde $n$ é o comprimento das strings.
-- **Espaço:** $O(1)$ (ou $O(|\Sigma|)$ onde $|\Sigma| = 26$ é o tamanho do alfabeto, alocado estaticamente na pilha).
+- **Tempo:** $O(n)$ — uma passagem sobre as strings de tamanho $n$, seguida por verificação fixa de 26 posições.
+- **Espaço:** $O(1)$ — tabela estática de 26 inteiros, independente do comprimento das strings.

@@ -1,34 +1,24 @@
-# 739. Daily Temperatures
+# 0739 · Daily Temperatures
 
-- **Nível:** Intermediário ([LeetCode #739](https://leetcode.com/problems/daily-temperatures/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Monotonic Decreasing Stack* (Pilha Monotônica Decrescente / *Next Greater Element*)
+**Dificuldade:** Intermediário | **Categoria:** Stack & Monotonic Stack | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros `temperatures` em que `temperatures[i]` representa a temperatura do dia `i`, retornar um vetor `answer` em que `answer[i]` indica quantos dias após `i` ocorre a primeira temperatura estritamente maior (ou `0` caso não ocorra).
 
-Para cada dia `i`, queremos saber quantos dias precisamos esperar até encontrar uma temperatura **estritamente maior** que `temperatures[i]`.
+## Abordagem
 
-Com uma **Pilha Monotônica Decrescente**, guardamos na pilha os **índices** dos dias que ainda aguardam um dia mais quente. As temperaturas correspondentes aos índices na pilha permanecem sempre em ordem decrescente:
-- Quando chega o dia `i` com `temperatures[i]` maior que a temperatura do índice no topo da pilha (`prevDay = st.top()`), descobrimos que `i` é o **primeiro dia mais quente** para `prevDay`!
-- Calculamos a distância `answer[prevDay] = i - prevDay`, desempilhamos `prevDay` e repetimos enquanto o topo for menor que `temperatures[i]`.
+`dailyTemperatures` mantém um vetor `answer(n, 0)` e uma pilha monotônica decrescente de índices `std::stack<int> pendingIndices`, armazenando dias que ainda aguardam uma temperatura superior à frente.
 
----
+Para cada dia `i` de `0` a `n - 1`:
+1. Enquanto `pendingIndices` não estiver vazia e `temperatures[i] > temperatures[pendingIndices.top()]`:
+   - Retira-se o índice `prevDay` do topo.
+   - Registra-se a distância em dias diretamente em `answer[prevDay] = i - prevDay`.
+2. Empilha-se `i` em `pendingIndices`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+Índices que restarem na pilha ao final do percurso preservam o valor padrão `0` em `answer`.
 
-1. Inicializamos `answer(n, 0)` e uma pilha de índices `std::stack<int> st`.
-2. Para `i` de `0` até `n - 1`:
-   - Enquanto `!st.empty() && temperatures[i] > temperatures[st.top()]`:
-     - `int prevIndex = st.top(); st.pop();`
-     - `answer[prevIndex] = i - prevIndex;`
-   - `st.push(i);`
-3. Retornamos `answer`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ amortizado — cada índice é empilhado exatamente uma vez e desempilhado no máximo uma vez.
-- **Espaço:** $O(n)$ — para a pilha de índices no pior caso (temperaturas estritamente decrescentes).
+- **Tempo:** $O(n)$ — cada índice é empilhado uma vez e desempilhado no máximo uma vez ao longo de todo o laço.
+- **Espaço:** $O(n)$ — no pior caso (temperaturas em ordem não crescente), `pendingIndices` armazena todos os $n$ índices.

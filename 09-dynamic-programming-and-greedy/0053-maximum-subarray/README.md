@@ -1,26 +1,21 @@
-# 53. Maximum Subarray
+# 0053 · Maximum Subarray
 
-- **Nível:** Intermediário ([LeetCode #53](https://leetcode.com/problems/maximum-subarray/))
-- **Classificação do Conceito:**
-  - **Algoritmo Clássico:** *Kadane's Algorithm* (Algoritmo de Kadane)
-  - **Paradigma:** *1D Dynamic Programming / Greedy Prefix Reset*
+**Dificuldade:** Intermediário | **Categoria:** Dynamic Programming & Greedy | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros `nums` (contendo ao menos um elemento, podendo incluir valores negativos), encontrar o subarray contíguo não vazio com a maior soma possível e retornar essa soma.
 
-O **Algoritmo de Kadane** responde em $O(n)$ tempo e $O(1)$ espaço qual é a maior soma possível de um subarray contíguo.
+## Abordagem
 
-A decisão de Programação Dinâmica no índice $i$ responde à pergunta:
-> *"Para formar o melhor subarray que termina exatamente em `nums[i]`, vale a pena continuar somando a `currentSum` anterior ou começar um subarray novo a partir de `nums[i]`?"*
+`maxSubArray` aplica o **Algoritmo de Kadane**, que mantém em passagem única a melhor soma terminando exatamente no índice atual (`currentSum`) e o máximo global observado (`maxSum`):
 
-Se `currentSum < 0`, carregar um prefixo negativo só diminuiria qualquer soma futura; logo, descartamos o passado e recomeçamos em `nums[i]`:
+- Inicializa `currentSum = nums[0]` e `maxSum = nums[0]`.
+- Para cada `i` de `1` até `nums.size() - 1`:
+  - `currentSum = std::max(nums[i], currentSum + nums[i])` — caso a soma acumulada anterior seja negativa, estendê-la apenas reduziria o resultado; reinicia-se a subcadeia em `nums[i]`.
+  - `maxSum = std::max(maxSum, currentSum)`.
 
-$$\text{currentSum} = \max(\text{nums}[i],\ \text{currentSum} + \text{nums}[i])$$
+## Complexidade
 
----
-
-## 2. Complexidade
-
-- **Tempo:** $O(n)$ — varredura única.
-- **Espaço:** $O(1)$ — apenas duas variáveis inteiras (`currentSum` e `maxSum`).
+- **Tempo:** $O(n)$ — uma única travessia linear por `nums`.
+- **Espaço:** $O(1)$ — apenas as variáveis `currentSum` e `maxSum`.

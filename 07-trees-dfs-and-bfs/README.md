@@ -1,22 +1,23 @@
-# 07 · Binary Trees, DFS & BFS (Árvores Binárias e Buscas em Profundidade/Largura)
+# 07 · Binary Trees, DFS & BFS (Árvores Binárias)
 
-## Qual é o nome correto desse conceito?
+## Estruturas e Algoritmos
 
-1. **Estrutura de Dados: Árvore Binária (*Binary Tree*)**
-   - Uma estrutura de dados hierárquica recursiva onde cada nó possui um valor e no máximo duas subárvores filhas (`left` e `right`).
-2. **Algoritmos de Travessia (*Tree Traversal Algorithms*):**
-   - **DFS (*Depth-First Search* / Busca em Profundidade):** Explora um ramo até as folhas antes de retroceder (*Backtrack*), utilizando a pilha de chamadas da recursão (ou uma `std::stack` explícita). Subdivide-se em:
-     - **Pré-Ordem (*Pre-order*):** `Raiz -> Esquerda -> Direita` (ideal para clonar/serializar ou propagar informações de cima para baixo, *Top-Down*).
-     - **Em-Ordem (*In-order*):** `Esquerda -> Raiz -> Direita` (em uma *Binary Search Tree - BST*, visita os elementos em ordem crescente).
-     - **Pós-Ordem (*Post-order*):** `Esquerda -> Direita -> Raiz` (ideal quando o pai precisa combinar as respostas já calculadas dos filhos, *Bottom-Up*, como altura e diâmetro).
-   - **BFS (*Breadth-First Search* / Busca em Largura / Travessia por Nível):** Visita a árvore andar por andar usando uma fila FIFO (`std::queue`).
+1. **Árvore Binária (*Binary Tree*):**
+   - Estrutura hierárquica recursiva na qual cada nó armazena um valor (`val`) e referências para até duas subárvores (`left` e `right`).
+2. **Estratégias de Travessia:**
+   - **DFS (*Depth-First Search* — Busca em Profundidade):** explora cada ramo até os nós folha antes de retroceder, utilizando a pilha de chamadas recursivas ou uma `std::stack` explícita.
+     - **Pré-Ordem (*Pre-order*):** `Raiz -> Esquerda -> Direita`, útil quando decisões ocorrem de cima para baixo (*top-down*).
+     - **Em-Ordem (*In-order*):** `Esquerda -> Raiz -> Direita`, produzindo sequência crescente em *Binary Search Trees (BST)*.
+     - **Pós-Ordem (*Post-order*):** `Esquerda -> Direita -> Raiz`, adequada para agregação de métricas *bottom-up* (altura, diâmetro, balanço).
+   - **BFS (*Breadth-First Search* — Busca em Largura):** percorre nível por nível utilizando uma fila FIFO (`std::queue`).
 
 ---
 
-## Problemas nesta pasta
+## Problemas
 
-| Problema | Dificuldade | Conceito / Algoritmo Principal |
+| Problema | Dificuldade | Padrão Principal |
 |---|---|---|
-| [0226 - Invert Binary Tree](./0226-invert-binary-tree/README.md) | Fácil | Recursão Estrutural (DFS Pré/Pós-Ordem) |
-| [0104 - Maximum Depth of Binary Tree](./0104-maximum-depth-of-binary-tree/README.md) | Fácil | Divisão e Conquista *Bottom-Up* em Árvore |
-| [0543 - Diameter of Binary Tree](./0543-diameter-of-binary-tree/README.md) | Fácil | DFS *Post-Order* com Acumulador Global de Caminho |
+| [0100 - Same Tree](./0100-same-tree/README.md) | Fácil | Comparação Recursiva Simétrica (DFS) |
+| [0104 - Maximum Depth of Binary Tree](./0104-maximum-depth-of-binary-tree/README.md) | Fácil | Divisão e Conquista *Bottom-Up* |
+| [0226 - Invert Binary Tree](./0226-invert-binary-tree/README.md) | Fácil | Recursão Estrutural em Árvore (DFS) |
+| [0543 - Diameter of Binary Tree](./0543-diameter-of-binary-tree/README.md) | Fácil | DFS *Post-Order* com Acumulador Global |

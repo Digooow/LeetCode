@@ -1,32 +1,23 @@
-# 704. Binary Search
+# 0704 · Binary Search
 
-- **Nível:** Fácil ([LeetCode #704](https://leetcode.com/problems/binary-search/))
-- **Classificação do Conceito:**
-  - **Algoritmo:** *Binary Search* (Busca Binária Clássica)
-  - **Paradigma:** *Decrease and Conquer* (Redução por Fator Constante)
+**Dificuldade:** Fácil | **Categoria:** Binary Search | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor de inteiros `nums` ordenado em ordem crescente e um inteiro `target`, retornar o índice de `target` em $O(\log n)$, ou `-1` se estiver ausente.
 
-Dado um vetor ordenado `nums`, comparamos o elemento central `nums[mid]` com `target`:
-- Se `nums[mid] == target`, encontramos o índice.
-- Se `nums[mid] < target`, todos os elementos à esquerda de `mid` também são menores que `target`, logo descartamos a metade esquerda fazendo `left = mid + 1`.
-- Se `nums[mid] > target`, descartamos a metade direita fazendo `right = mid - 1`.
+## Abordagem
 
----
+`search` realiza busca binária clássica em intervalo fechado `[left, right]` (`0` até `nums.size() - 1`):
 
-## 2. Explicação do Algoritmo Passo a Passo
+- A cada iteração de `while (left <= right)`, calcula `mid = left + (right - left) / 2` para evitar *integer overflow* em índices grandes.
+- Compara `nums[mid]` com `target`:
+  - Igual: retorna `mid`.
+  - Menor que `target`: descarta a metade esquerda ajustando `left = mid + 1`.
+  - Maior que `target`: descarta a metade direita ajustando `right = mid - 1`.
+- Caso o intervalo se esgote sem encontro, retorna `-1`.
 
-1. Definimos o intervalo fechado `[left, right] = [0, n - 1]`.
-2. Enquanto `left <= right`:
-   - Calculamos `mid = left + (right - left) / 2` (evita estouro de inteiro 32-bits se `left + right > INT_MAX`).
-   - Comparamos `nums[mid]` com `target` e ajustamos os limites.
-3. Se o intervalo esvaziar (`left > right`), retornamos `-1`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(\log n)$ — o tamanho do intervalo cai pela metade a cada iteração.
-- **Espaço:** $O(1)$ — implementação iterativa sem pilha de recursão.
+- **Tempo:** $O(\log n)$ — metade do espaço de busca restante é eliminada por iteração.
+- **Espaço:** $O(1)$ — execução iterativa sem consumo de pilha de recursão.

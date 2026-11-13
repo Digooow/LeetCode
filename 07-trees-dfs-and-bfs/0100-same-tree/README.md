@@ -1,21 +1,20 @@
-# 100. Same Tree
+# 0100 · Same Tree
 
-- **Nível:** Fácil ([LeetCode #100](https://leetcode.com/problems/same-tree/))
-- **Classificação do Conceito:**
-  - **Algoritmo:** *Simultaneous Pre-Order DFS* (Travessia Simultânea de Árvores em Profundidade)
+**Dificuldade:** Fácil | **Categoria:** Trees (DFS & BFS) | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dadas as raízes de duas árvores binárias `p` e `q`, verificar se ambas são estruturalmente idênticas e contêm os mesmos valores em todos os nós correspondentes.
 
-Para verificar isomorfismo estrutural e igualdade de valores entre duas árvores binárias `p` e `q`, percorremos **ambas simultaneamente** em Pré-Ordem:
-1. Se `p == nullptr && q == nullptr`, ambas terminaram juntas neste ramo (`true`).
-2. Se apenas uma for `nullptr` ou `p->val != q->val`, encontramos uma diferença (`false`).
-3. Caso contrário, exigimos recursivamente `isSameTree(p->left, q->left) && isSameTree(p->right, q->right)`.
+## Abordagem
 
----
+`isSameTree` aplica recursão estrutural simétrica (DFS) avaliando os pares de nós em três casos:
 
-## 2. Complexidade
+1. `p == nullptr && q == nullptr`: ambas as subárvores terminaram simultaneamente, portanto coincidem (`return true`).
+2. `p == nullptr || q == nullptr || p->val != q->val`: divergência estrutural ou de valor (`return false`).
+3. Caso contrário, ambas existem com o mesmo valor; verifica recursivamente `isSameTree(p->left, q->left) && isSameTree(p->right, q->right)`.
 
-- **Tempo:** $O(\min(n, m))$ — para no primeiro nó divergente.
-- **Espaço:** $O(\min(h_p, h_q))$ na pilha de chamadas.
+## Complexidade
+
+- **Tempo:** $O(n)$ — onde $n$ é o número de nós da menor árvore visitada antes de qualquer divergência.
+- **Espaço:** $O(h)$ — profundidade da pilha de recursão correspondente à altura $h$ da árvore ($O(\log n)$ balanceada, $O(n)$ degenerada).

@@ -1,27 +1,23 @@
-# 207. Course Schedule
+# 0207 · Course Schedule
 
-- **Nível:** Intermediário ([LeetCode #207](https://leetcode.com/problems/course-schedule/))
-- **Classificação do Conceito:**
-  - **Estrutura de Dados:** Grafo Direcionado (*Directed Graph* — Lista de Adjacência)
-  - **Algoritmo Clássico:** *Kahn's Topological Sort Algorithm* (Ordenação Topológica de Kahn / Detecção de Ciclo via Grau de Entrada)
+**Dificuldade:** Intermediário | **Categoria:** Graphs & Topological Sort | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um total `numCourses` de disciplinas (`0` a `numCourses - 1`) e uma lista de pares `prerequisites` onde `[course, prereq]` indica que `prereq` deve preceder `course`, determinar se é possível concluir todas as disciplinas.
 
-Quando cursos (ou pacotes de software, migrations ou tarefas de um *pipeline*) possuem pré-requisitos `[a, b]` ("para cursar `a`, é preciso concluir `b` antes", isto é, uma aresta direcionada $b \to a$), só é possível concluir todos os cursos se o grafo for um **DAG (*Directed Acyclic Graph* — Grafo Direcionado Acíclico)**.
+## Abordagem
 
-O **Algoritmo de Kahn (1962)** testa se um grafo direcionado é um DAG usando **Busca em Largura (BFS) guiada por Grau de Entrada (`inDegree`)**:
-1. Calculamos `inDegree[u]` = quantos pré-requisitos pendentes o curso `u` possui.
-2. Enfileiramos todos os cursos com `inDegree[u] == 0` (cursos que já podem ser feitos imediatamente).
-3. Enquanto a fila não estiver vazia:
-   - Retiramos `u`, incrementamos `++completedCourses` e, para cada curso dependente `v` em `adj[u]`, decrementamos `--inDegree[v]`.
-   - Se `inDegree[v]` chegou a `0`, todos os pré-requisitos de `v` foram cumpridos $\rightarrow$ enfileiramos `v`.
-4. Ao final, se `completedCourses == numCourses`, não há ciclo (`true`); caso contrário, existe um ciclo de dependência circular (`false`).
+O problema modela a detecção de ciclo em um grafo direcionado: é possível concluir todos os cursos se e somente se o grafo for um **DAG** (*Directed Acyclic Graph*). Em `canFinish`, aplica-se a **Ordenação Topológica via Algoritmo de Kahn (BFS por grau de entrada)**:
 
----
+1. Constrói-se a lista de adjacência `adj[prereq].push_back(course)` e contabiliza-se o grau de entrada `inDegree[course]` para cada vértice.
+2. Todos os cursos sem dependências pendentes (`inDegree[i] == 0`) entram na fila `ready`.
+3. Enquanto `ready` não estiver vazia:
+   - Extrai `curr` e incrementa `completed`.
+   - Para cada dependente `nextCourse` em `adj[curr]`, decrementa `--inDegree[nextCourse]`; ao atingir `0`, enfileira `nextCourse`.
+4. Retorna `completed == numCourses`. Caso haja dependências cíclicas, os vértices do ciclo nunca atingem grau zero e `completed` permanece estritamente menor que `numCourses`.
 
-## 2. Complexidade
+## Complexidade
 
-- **Tempo:** $O(V + E)$, onde $V = \text{numCourses}$ e $E = \text{prerequisites.size()}$.
-- **Espaço:** $O(V + E)$ para armazenar a lista de adjacência e o vetor `inDegree`.
+- **Tempo:** $O(V + E)$ — onde $V = \text{numCourses}$ e $E = |\text{prerequisites}|$; cada vértice e cada aresta direcionada são processados uma única vez.
+- **Espaço:** $O(V + E)$ — armazenamento da lista de adjacência `adj`, do vetor `inDegree` e da fila `ready`.

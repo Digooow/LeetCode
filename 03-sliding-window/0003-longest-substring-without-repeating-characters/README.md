@@ -1,35 +1,22 @@
-# 3. Longest Substring Without Repeating Characters
+# 0003 · Longest Substring Without Repeating Characters
 
-- **Nível:** Intermediário ([LeetCode #3](https://leetcode.com/problems/longest-substring-without-repeating-characters/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Variable-Size Sliding Window with Direct-Index Jump* (Janela Deslizante de Tamanho Variável com Salto por Última Ocorrência)
+**Dificuldade:** Intermediário | **Categoria:** Sliding Window | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dada uma string `s`, encontrar o comprimento da maior substring contígua que não contém caracteres repetidos.
 
-Queremos encontrar a maior janela contígua `s[left .. right]` que **não contenha caracteres repetidos**.
+## Abordagem
 
-Em vez de encolher `left` de 1 em 1 com um `unordered_set`, mantemos uma tabela `lastSeen[256]` (inicializada com `-1`) que guarda o **último índice** em que cada caractere ASCII apareceu:
-- Quando `right` lê um caractere `c = s[right]` que já apareceu dentro da janela atual (`lastSeen[c] >= left`), significa que houve repetição.
-- Saltamos `left` diretamente para `lastSeen[c] + 1`, eliminando a duplicata em $O(1)$!
+Em `lengthOfLongestSubstring`, uma janela deslizante dinâmica `[left, right]` mantém todos os caracteres do intervalo atual sem repetições:
 
----
+1. Um array fixo `std::array<int, 256> lastSeen` (inicializado com `-1`) registra o último índice em que cada byte (`static_cast<unsigned char>(s[right])`) foi visto.
+2. Quando o caractere `c` em `right` já apareceu dentro da janela ativa (`lastSeen[c] >= left`), o ponteiro `left` salta diretamente para `lastSeen[c] + 1`, descartando o prefixo que causaria colisão em $O(1)$.
+3. Atualiza-se `lastSeen[c] = right` e recalcula-se `maxLen = std::max(maxLen, right - left + 1)`.
 
-## 2. Explicação do Algoritmo Passo a Passo
+Saltar `left` diretamente pelo último índice registrado evita ter de avançar `left` caractere por caractere até eliminar a duplicata.
 
-1. Criamos `std::array<int, 256> lastSeen` preenchido com `-1`.
-2. Inicializamos `left = 0` e `maxLen = 0`.
-3. Para `right` de `0` até `s.size() - 1`:
-   - Seja `c = static_cast<unsigned char>(s[right])`.
-   - Se `lastSeen[c] >= left`, movemos `left = lastSeen[c] + 1`.
-   - Registramos `lastSeen[c] = right`.
-   - Atualizamos `maxLen = std::max(maxLen, right - left + 1)`.
-4. Retornamos `maxLen`.
+## Complexidade
 
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — passagem única sem retrocesso.
-- **Espaço:** $O(1)$ — tabela estática de 256 inteiros para a tabela ASCII.
+- **Tempo:** $O(n)$ — passagem única por `s` com indexação direta em `lastSeen`.
+- **Espaço:** $O(1)$ — tabela estática de 256 inteiros, independente do tamanho da entrada.

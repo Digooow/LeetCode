@@ -1,36 +1,22 @@
-# 11. Container With Most Water
+# 0011 · Container With Most Water
 
-- **Nível:** Intermediário ([LeetCode #11](https://leetcode.com/problems/container-with-most-water/))
-- **Classificação do Conceito:**
-  - **Padrão Algorítmico:** *Converging Two Pointers* (Dois Ponteiros Convergentes)
-  - **Paradigma:** *Greedy Bottleneck Elimination* (Eliminação Gulosa do Gargalo)
+**Dificuldade:** Intermediário | **Categoria:** Two Pointers | **Arquivo:** [solution.cpp](./solution.cpp)
 
----
+## Problema
 
-## 1. O que é esse conceito?
+Dado um vetor `height` de $n$ alturas verticais, escolher duas linhas $(i, j)$ que formem, junto ao eixo horizontal, um recipiente com a maior área possível de água: $(j - i) \cdot \min(\text{height}[i], \text{height}[j])$.
 
-A área formada entre duas paredes nos índices `left` e `right` é dada por:
+## Abordagem
 
-$$\text{Área}(left, right) = (right - left) \times \min(\text{height}[left], \text{height}[right])$$
+`maxArea` inicializa dois ponteiros nos extremos (`left = 0` e `right = n - 1`), maximizando a largura inicial `width = right - left`.
 
-Começando com a largura máxima possível (`left = 0`, `right = n - 1`), qualquer movimento para dentro **diminui a largura** $(right - left)$. Portanto, a única chance de encontrar uma área maior é **aumentar a altura limitante** $\min(\text{height}[left], \text{height}[right])$.
+A cada passo no laço `while (left < right)`:
+1. Calcula a área corrente `width * std::min(height[left], height[right])` e atualiza `best`.
+2. Desloca o ponteiro cuja barra é **menor**: se `height[left] < height[right]`, avança `++left`; caso contrário, recua `--right`.
 
-A **escolha gulosa (*Greedy Choice*)** consiste em sempre descartar e mover o ponteiro da **parede mais baixa** (o gargalo), pois manter a parede mais baixa e diminuir a largura jamais poderia produzir uma área superior à atual.
+**Justificativa da escolha gulosa:** mover a barra mais alta nunca aumenta a área em relação à largura já reduzida, pois a altura do recipiente continua limitada pela menor barra (`minHeight`). Descartar o menor limitante é a única transição capaz de alcançar uma altura mínima superior.
 
----
+## Complexidade
 
-## 2. Explicação do Algoritmo Passo a Passo
-
-1. Inicializamos `left = 0`, `right = n - 1` e `maxArea = 0`.
-2. Enquanto `left < right`:
-   - Calculamos `width = right - left` e `h = std::min(height[left], height[right])`.
-   - Atualizamos `maxArea = std::max(maxArea, width * h)`.
-   - Se `height[left] < height[right]`, avançamos `++left`; caso contrário, recuamos `--right`.
-3. Retornamos `maxArea`.
-
----
-
-## 3. Complexidade
-
-- **Tempo:** $O(n)$ — em cada passo `right - left` diminui em 1, executando exatamente $n - 1$ comparações.
-- **Espaço:** $O(1)$ — apenas variáveis escalares.
+- **Tempo:** $O(n)$ — cada elemento é examinado por no máximo um dos ponteiros convergentes.
+- **Espaço:** $O(1)$ — apenas variáveis escalares para os índices e máximo acumulado.
